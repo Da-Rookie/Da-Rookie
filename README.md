@@ -1,4 +1,7 @@
-## Hi there 👋
+## Hello World! I'm Prasetyo 👋
+
+![My Profile Picture](img/Banner.png)
+
 
 <!--
 **Da-Rookie/Da-Rookie** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
