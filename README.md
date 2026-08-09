@@ -1,207 +1,231 @@
-👋 Hello, I'm Eko Prasetyo
+<!-- ============================= --><!-- HERO --><!-- ============================= --><div align="center"><img src="img/Banner.png" alt="Eko Prasetyo Banner" width="100%" /><br><br>
 
-<p align="center">
-  <img src="img/Banner.png" alt="Eko Prasetyo Banner" width="100%" />
-</p><p align="center">
-  <strong>Full-Stack Developer · AI & Automation · Data · Product & Business</strong>
-</p><p align="center">
-  Building digital products that connect technology, data, and business processes.
-</p><p align="center">
-  <a href="https://www.linkedin.com/in/eko-prstyo">
-    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
-  </a>
-  <a href="https://www.instagram.com/ekoprstyoprtm">
-    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" />
-  </a>
-  <a href="https://github.com/Da-Rookie">
-    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
-  </a>
-</p>---
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=24&duration=2500&pause=900&color=36BCF7&center=true&vCenter=true&width=700&lines=%24+whoami;Eko+Prasetyo;Full-Stack+Developer;Learning+AI+%26+Automation;Building+things+with+code..." /><br>> Hello World! 👋
+> I'm Eko.
+> I code. I learn. I break things. I fix them. 🔧
 
-🧑‍💻 About Me
+<br><a href="https://github.com/Da-Rookie">
+<img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
+</a>
+<a href="https://www.linkedin.com/in/eko-prstyo">
+<img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
+</a>
+<a href="https://www.instagram.com/ekoprstyoprtm">
+<img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white" />
+</a></div>---
 
-I'm an Informatics Engineering undergraduate and a technology enthusiast focused on building practical digital solutions across software engineering, AI, data, and business automation.
+👨‍💻 "$ cat about-me.txt"
 
-My experience sits at the intersection of technology and business — from building full-stack applications to designing automation workflows, analyzing data, and exploring AI-powered solutions.
+Hi! I'm Eko 👋
 
-I'm particularly interested in:
+I'm an Informatics Engineering student who enjoys
+building things with code and learning new technologies.
 
-- 🤖 AI & Generative AI
-- ⚙️ Business Process Automation
-- 📊 Data Analytics & Applied AI
-- 💻 Full-Stack Web Development
-- 🚀 Digital Product Development
-- 💼 Product & Business Development
+Currently exploring:
 
-«My goal: turn technology, data, and automation into solutions that create measurable business value.»
+→ Full-Stack Development
+→ AI & Generative AI
+→ Business Process Automation
+→ Data Analytics
+→ Digital Product Development
+
+Still learning.
+Still experimenting.
+Still shipping. 🚀
 
 ---
 
-🎯 Core Expertise
+⚡ "$ ./what-i-build.sh"
 
-Full-Stack Development
-        ↓
-AI & Generative AI
-        ↓
-Data & Analytics
-        ↓
-Business Process Automation
-        ↓
-Digital Product Development
-
----
-
-⚡ What I Build
-
-Area| Focus
-💻 Software Engineering| Full-stack web applications & scalable backend systems
-🤖 AI Engineering| LLM, NLP, RAG, AI-powered applications & intelligent workflows
-⚙️ Automation| Business process automation & workflow orchestration
-📊 Data| Data analysis, visualization & business insights
-🚀 Product| Product development, experimentation & digital transformation
-
----
-
-🛠️ Tech Stack
-
-💻 Languages
-
-<p>
-  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" />
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" />
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
-</p>🧩 Frameworks & Libraries
-
-<p>
-  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
-  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
-  <img src="https://img.shields.io/badge/Livewire-4E56A6?style=for-the-badge&logo=livewire&logoColor=white" />
-</p>🤖 AI / Data / Automation
-
-<p>
-  <img src="https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white" />
-  <img src="https://img.shields.io/badge/NLP-412991?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/RAG-000000?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white" />
-  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
-  <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white" />
-  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" />
-  <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" />
-</p>🗄️ Database
-
-<p>
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" />
-  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
-  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
-</p>📊 Analytics & Visualization
-
-<p>
-  <img src="https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" />
-  <img src="https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white" />
-  <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" />
-  <img src="https://img.shields.io/badge/Google_Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" />
-</p>🔧 Tools & Platforms
-
-<p>
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
-  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
-  <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" />
-  <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" />
-  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
-  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white" />
-  <img src="https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white" />
-</p>---
-
-📚 Currently Exploring
+<div align="center"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2200&pause=800&center=true&vCenter=true&width=650&lines=Web+Applications;Backend+Systems;AI-powered+Applications;Automation+Workflows;Data+Analytics;Digital+Products" /></div>💻 Software
+   └── Web Apps
+   └── Backend Systems
+   └── REST APIs
 
 🤖 AI
-
-- Generative AI
-- LLM Applications
-- RAG
-- NLP
-- AI Agents
+   └── LLM Applications
+   └── NLP
+   └── RAG
+   └── AI Agents
 
 ⚙️ Automation
-
-- n8n
-- Workflow Automation
-- Business Process Automation
-- AI-powered Workflows
-
-💻 Engineering
-
-- Full-Stack Development
-- Backend Architecture
-- API Development
-- Redis & Caching
+   └── n8n Workflows
+   └── API Integration
+   └── Business Process Automation
 
 📊 Data
-
-- Data Analytics
-- Applied AI
-- Data Visualization
-- Business Intelligence
+   └── Data Analysis
+   └── Data Visualization
+   └── Business Intelligence
 
 ---
 
-🧠 My Approach
+🛠️ "$ ls -la tech-stack/"
 
-«"Technology should solve problems, not just demonstrate technology."»
+💻 Programming Languages
 
-I enjoy working across the full lifecycle of a digital solution:
+<p align="center"><img src="https://skillicons.dev/icons?i=php,python,javascript,typescript,dart,html,css,cpp,json" /></p><details>
+<summary>📦 More details</summary>Technology| Usage
+PHP| Backend development
+Python| AI, data & automation
+JavaScript| Web development
+TypeScript| Modern web applications
+Dart| Flutter development
+HTML5| Web structure
+CSS3| Web styling
+C++| Programming fundamentals
+JSON| Data exchange & API
 
-Problem
-   ↓
-Research
-   ↓
-Product
-   ↓
-Engineering
-   ↓
-Data
-   ↓
-Automation
-   ↓
-Impact
+</details>---
 
-This allows me to bridge the gap between technical implementation and business objectives.
+🎨 Frontend
+
+<p align="center"><img src="https://skillicons.dev/icons?i=react,nextjs,tailwind,html,css,vite" /><br><br>
+
+<img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white" />
+<img src="https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black" />
+<img src="https://img.shields.io/badge/Livewire-4E56A6?style=for-the-badge&logo=livewire&logoColor=white" />
+<img src="https://img.shields.io/badge/Turbo_Hotwired-000000?style=for-the-badge&logo=hotwire&logoColor=white" /></p><details>
+<summary>📦 Frontend details</summary>React.js
+Next.js
+Tailwind CSS
+Vite
+Framer Motion
+GSAP
+Livewire
+Turbo Hotwired
+
+</details>---
+
+⚙️ Backend & API
+
+<p align="center"><img src="https://skillicons.dev/icons?i=laravel,nodejs,fastapi,php" /><br><br>
+
+<img src="https://img.shields.io/badge/REST_API-02569B?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Laravel_Breeze-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+<img src="https://img.shields.io/badge/Jetstream-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+<img src="https://img.shields.io/badge/Filament-F59E0B?style=for-the-badge" /></p>Laravel
+Node.js
+FastAPI
+REST API
+Laravel Breeze
+Laravel Jetstream
+Filament
 
 ---
 
-📈 GitHub Activity
+🤖 AI / Machine Learning / NLP
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=Da-Rookie&show_icons=true&hide_border=true&rank_icon=github" height="170" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Da-Rookie&layout=compact&hide_border=true" height="170" />
-</p><p align="center">
-  <img src="https://streak-stats.demolab.com?user=Da-Rookie&hide_border=true" />
-</p>---
+<p align="center"><img src="https://skillicons.dev/icons?i=python" /><br><br>
 
-🤝 Let's Connect
+<img src="https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white" />
+<img src="https://img.shields.io/badge/LLM-412991?style=for-the-badge" />
+<img src="https://img.shields.io/badge/RAG-000000?style=for-the-badge" />
+<img src="https://img.shields.io/badge/NLP-5C3EE8?style=for-the-badge" />
+<img src="https://img.shields.io/badge/AI_Agents-FF6F00?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Prompt_Engineering-4285F4?style=for-the-badge" /></p>Python
+├── NLP
+├── Machine Learning
+├── Generative AI
+├── LLM Applications
+├── RAG
+├── AI Agents
+└── Prompt Engineering
 
-I'm open to opportunities, collaborations, product ideas, and conversations around:
+LangChain
 
-AI · Automation · Software Engineering · Data · Digital Product · Business Development
+---
 
-<p align="center">
-  <a href="https://www.linkedin.com/in/eko-prstyo">
-    <img src="https://img.shields.io/badge/Let's_connect-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
-  </a>
-  <a href="https://github.com/Da-Rookie">
-    <img src="https://img.shields.io/badge/Explore_my_work-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
-  </a>
-</p><p align="center">
-  <i>Building with code. Thinking with data. Automating for impact.</i>
-</p>
+📊 Data & Analytics
+
+<p align="center"><img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" />
+<img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" />
+<img src="https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white" />
+<img src="https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge&logo=matplotlib&logoColor=white" /><br><br>
+
+<img src="https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" />
+<img src="https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white" />
+<img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" />
+<img src="https://img.shields.io/badge/Google_Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" /></p>Data Analysis
+├── Pandas
+├── NumPy
+├── Matplotlib
+├── Scikit-Learn
+└── Jupyter
+
+Visualization
+├── Power BI
+└── Tableau
+
+---
+
+🗄️ Database & Storage
+
+<p align="center"><img src="https://skillicons.dev/icons?i=mysql,postgres,mongodb,redis" /></p>MySQL
+PostgreSQL
+MongoDB
+Redis
+
+---
+
+⚡ Automation
+
+<p align="center"><img src="https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white" />
+<img src="https://img.shields.io/badge/Workflow_Automation-6C5CE7?style=for-the-badge" />
+<img src="https://img.shields.io/badge/API_Integration-02569B?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Business_Automation-00A67E?style=for-the-badge" /></p>n8n
+├── Workflow Automation
+├── API Integration
+├── AI Workflows
+└── Business Process Automation
+
+---
+
+🧰 Developer Tools
+
+<p align="center"><img src="https://skillicons.dev/icons?i=git,github,docker,postman,vscode,vercel" /><br><br>
+
+<img src="https://img.shields.io/badge/Laragon-0E83CD?style=for-the-badge" />
+<img src="https://img.shields.io/badge/ngrok-1F1E37?style=for-the-badge&logo=ngrok&logoColor=white" /></p>---
+
+🎨 Design & Productivity
+
+<p align="center"><img src="https://skillicons.dev/icons?i=figma" /><br><br>
+
+<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white" />
+<img src="https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white" /></p>---
+
+🌱 "$ ./currently-learning"
+
+<div align="center"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2300&pause=700&center=true&vCenter=true&width=700&lines=Learning+Generative+AI...;Exploring+LLM+Applications...;Building+AI+Agents...;Experimenting+with+RAG...;Automating+Business+Processes...;Improving+my+Full-Stack+skills..." /></div>Status: 🟢 Learning
+
+AI              ███████████░░  80%
+Automation      ██████████░░░  75%
+Data            █████████░░░░  70%
+Full-Stack      ████████████░  85%
+
+> Progress > perfection.
+
+---
+
+🧠 "$ cat philosophy.txt"
+
+<div align="center">"Technology should solve problems, not just demonstrate technology."
+
+<br><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=16&duration=2000&pause=700&center=true&vCenter=true&width=600&lines=Problem+%E2%86%92+Research+%E2%86%92+Build;Build+%E2%86%92+Test+%E2%86%92+Improve;Data+%E2%86%92+Insight+%E2%86%92+Action;Automate+%E2%86%92+Scale+%E2%86%92+Impact" /></div>---
+
+📈 "$ git status"
+
+<div align="center"><img src="https://github-readme-stats.vercel.app/api?username=Da-Rookie&show_icons=true&hide_border=true&rank_icon=github" height="160" /><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Da-Rookie&layout=compact&hide_border=true&langs_count=8" height="160" /><br><br>
+
+<img src="https://streak-stats.demolab.com?user=Da-Rookie&hide_border=true" height="160" /></div>---
+
+<div align="center"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=17&duration=2500&pause=1000&center=true&vCenter=true&width=650&lines=Thanks+for+visiting!+%F0%9F%91%8B;Keep+coding.+Keep+learning.;See+you+in+the+next+commit+%F0%9F%9A%80" /><br><br>
+
+<a href="https://www.linkedin.com/in/eko-prstyo">
+<img src="https://img.shields.io/badge/Let's_Connect-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+</a><br><br>
+
+<sub>while(alive) { learn(); build(); repeat(); }</sub>
+
+</div>
