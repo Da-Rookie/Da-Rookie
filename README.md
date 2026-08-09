@@ -49,6 +49,8 @@ Business Process Automation
         ↓
 Digital Product Development
 
+---
+
 ⚡ What I Build
 
 Area| Focus
@@ -121,103 +123,58 @@ Area| Focus
   <img src="https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white" />
 </p>---
 
-🚀 Featured Projects
-
-🌐 Portfolio Website
-
-Personal Developer & AI Portfolio
-
-A modern portfolio focused on showcasing my work across software engineering, AI, automation, data, and digital product development.
-
-"Next.js" · "Tailwind CSS" · "Framer Motion" · "GSAP"
-
----
-
-🤖 AI Prompt Playground
-
-An experimental playground for exploring LLM prompting, AI workflows, and intelligent application concepts.
-
-"AI" · "NLP" · "LLM" · "Prompt Engineering"
-
----
-
-⚡ Redis Playground
-
-A hands-on project for exploring Redis, caching, data structures, and performance-oriented backend architecture.
-
-"Redis" · "Backend" · "Caching" · "Laravel"
-
----
-
-🏪 Klik Kelontong
-
-Previously served as Product & Technology Lead for a digital platform designed to help neighborhood stores digitize their operations.
-
-Focused on:
-
-- Product strategy
-- Full-stack development
-- Business process digitization
-- Inventory management
-- Digital storefront
-- Automation & operational workflows
-
-"Laravel" · "React" · "MySQL" · "Product Development"
-
----
-
-🏥 HRIS & Attendance System
-
-Full-stack internship project for PT Pertamina Bina Medika IHC, focused on employee management and attendance digitization.
-
-Key capabilities included:
-
-- Employee master data
-- Attendance management
-- Face recognition
-- GPS-based location validation
-- HR information management
-
-"Laravel" · "MySQL" · "Tailwind CSS" · "Face Recognition" · "Google Maps API"
-
----
-
 📚 Currently Exploring
 
-AI:
-  - Generative AI
-  - LLM Applications
-  - RAG
-  - NLP
-  - AI Agents
+🤖 AI
 
-Automation:
-  - n8n
-  - Workflow Automation
-  - Business Process Automation
-  - AI-powered Workflows
+- Generative AI
+- LLM Applications
+- RAG
+- NLP
+- AI Agents
 
-Engineering:
-  - Full-Stack Development
-  - Backend Architecture
-  - API Development
-  - Redis & Caching
+⚙️ Automation
 
-Data:
-  - Data Analytics
-  - Applied AI
-  - Data Visualization
-  - Business Intelligence
+- n8n
+- Workflow Automation
+- Business Process Automation
+- AI-powered Workflows
+
+💻 Engineering
+
+- Full-Stack Development
+- Backend Architecture
+- API Development
+- Redis & Caching
+
+📊 Data
+
+- Data Analytics
+- Applied AI
+- Data Visualization
+- Business Intelligence
 
 ---
 
 🧠 My Approach
 
-«Technology should solve problems, not just demonstrate technology.»
+«"Technology should solve problems, not just demonstrate technology."»
 
 I enjoy working across the full lifecycle of a digital solution:
 
-Problem → Research → Product → Engineering → Data → Automation → Impact
+Problem
+   ↓
+Research
+   ↓
+Product
+   ↓
+Engineering
+   ↓
+Data
+   ↓
+Automation
+   ↓
+Impact
 
 This allows me to bridge the gap between technical implementation and business objectives.
 
