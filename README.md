@@ -1,86 +1,250 @@
-<!-- ========================= --><!-- HERO --><!-- ========================= --><div align="center"><img src="img/Banner.png" alt="Eko Prasetyo Banner" width="100%" /><br><br>
+👋 Hello, I'm Eko Prasetyo
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=24&duration=3000&pause=1000&color=36BCF7&center=true&vCenter=true&width=700&lines=Full-Stack+Developer;AI+%26+Automation+Enthusiast;Data+%26+Business+Automation;Building+Digital+Products" alt="Typing Animation" /><br><p>
-  I build digital products by combining
-  <b>software</b>, <b>AI</b>, <b>data</b>, and <b>automation</b>.
-</p><br><a href="https://www.linkedin.com/in/eko-prstyo">
-<img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" />
-</a>
-&nbsp;
-<a href="https://github.com/Da-Rookie">
-<img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
-</a>
-&nbsp;
-<a href="https://www.instagram.com/ekoprstyoprtm">
-<img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white" />
-</a></div>
+<p align="center">
+  <img src="img/Banner.png" alt="Eko Prasetyo Banner" width="100%" />
+</p><p align="center">
+  <strong>Full-Stack Developer · AI & Automation · Data · Product & Business</strong>
+</p><p align="center">
+  Building digital products that connect technology, data, and business processes.
+</p><p align="center">
+  <a href="https://www.linkedin.com/in/eko-prstyo">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="https://www.instagram.com/ekoprstyoprtm">
+    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" />
+  </a>
+  <a href="https://github.com/Da-Rookie">
+    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+  </a>
+</p>---
 
-<!-- ========================= --><!-- ABOUT --><!-- ========================= -->👋 About Me
+🧑‍💻 About Me
 
-I'm an Informatics Engineering undergraduate focused on:
+I'm an Informatics Engineering undergraduate and a technology enthusiast focused on building practical digital solutions across software engineering, AI, data, and business automation.
 
-"Full-Stack Development" · "AI" · "Automation" · "Data" · "Digital Product"
+My experience sits at the intersection of technology and business — from building full-stack applications to designing automation workflows, analyzing data, and exploring AI-powered solutions.
 
-I enjoy turning real-world problems into useful software, intelligent workflows, and scalable digital solutions.
+I'm particularly interested in:
 
+- 🤖 AI & Generative AI
+- ⚙️ Business Process Automation
+- 📊 Data Analytics & Applied AI
+- 💻 Full-Stack Web Development
+- 🚀 Digital Product Development
+- 💼 Product & Business Development
 
-<!-- ========================= --><!-- ANIMATED DIVIDER --><!-- ========================= --><div align="center"><img src="https://capsule-render.vercel.app/api?type=rect&height=2&color=36BCF7" width="80%" /></div>
+«My goal: turn technology, data, and automation into solutions that create measurable business value.»
 
-⚡ Tech Stack
+---
 
-<div align="center"><img src="https://skillicons.dev/icons?i=php,python,js,ts,laravel,nextjs,react,nodejs,fastapi,tailwind,flutter,mysql,postgres,mongodb,redis,docker,git,github" /><br><br>
+🎯 Core Expertise
 
-<img src="https://img.shields.io/badge/AI%20%26%20LLM-LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white" />
-<img src="https://img.shields.io/badge/Automation-n8n-EA4B71?style=flat-square&logo=n8n&logoColor=white" />
-<img src="https://img.shields.io/badge/Data-Pandas-150458?style=flat-square&logo=pandas&logoColor=white" />
-<img src="https://img.shields.io/badge/Data-Scikit--Learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white" />
-<img src="https://img.shields.io/badge/BI-Power%20BI-F2C811?style=flat-square&logo=powerbi&logoColor=black" /></div>
+Full-Stack Development
+        ↓
+AI & Generative AI
+        ↓
+Data & Analytics
+        ↓
+Business Process Automation
+        ↓
+Digital Product Development
 
-🚀 Things I've Built
+⚡ What I Build
 
-<div align="center">🌐 Portfolio Website
+Area| Focus
+💻 Software Engineering| Full-stack web applications & scalable backend systems
+🤖 AI Engineering| LLM, NLP, RAG, AI-powered applications & intelligent workflows
+⚙️ Automation| Business process automation & workflow orchestration
+📊 Data| Data analysis, visualization & business insights
+🚀 Product| Product development, experimentation & digital transformation
 
-Modern personal portfolio for showcasing my work in engineering, AI, automation, and digital products.
+---
 
-"Next.js" "Tailwind CSS" "Framer Motion" "GSAP"
+🛠️ Tech Stack
 
+💻 Languages
+
+<p>
+  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" />
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+</p>🧩 Frameworks & Libraries
+
+<p>
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" />
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Livewire-4E56A6?style=for-the-badge&logo=livewire&logoColor=white" />
+</p>🤖 AI / Data / Automation
+
+<p>
+  <img src="https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white" />
+  <img src="https://img.shields.io/badge/NLP-412991?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/RAG-000000?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
+  <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white" />
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" />
+  <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" />
+</p>🗄️ Database
+
+<p>
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
+</p>📊 Analytics & Visualization
+
+<p>
+  <img src="https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" />
+  <img src="https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white" />
+  <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Google_Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" />
+</p>🔧 Tools & Platforms
+
+<p>
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" />
+  <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
+  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white" />
+  <img src="https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white" />
+</p>---
+
+🚀 Featured Projects
+
+🌐 Portfolio Website
+
+Personal Developer & AI Portfolio
+
+A modern portfolio focused on showcasing my work across software engineering, AI, automation, data, and digital product development.
+
+"Next.js" · "Tailwind CSS" · "Framer Motion" · "GSAP"
+
+---
 
 🤖 AI Prompt Playground
 
-Experimenting with LLMs, prompting, AI workflows, and intelligent applications.
+An experimental playground for exploring LLM prompting, AI workflows, and intelligent application concepts.
 
-"AI" "LLM" "NLP" "Prompt Engineering"
+"AI" · "NLP" · "LLM" · "Prompt Engineering"
 
+---
 
 ⚡ Redis Playground
 
-Exploring caching, data structures, and backend performance using Redis.
+A hands-on project for exploring Redis, caching, data structures, and performance-oriented backend architecture.
 
-"Redis" "Backend" "Caching"
+"Redis" · "Backend" · "Caching" · "Laravel"
 
+---
 
 🏪 Klik Kelontong
 
-Previously built as Product & Technology Lead, helping neighborhood stores move toward digital operations.
+Previously served as Product & Technology Lead for a digital platform designed to help neighborhood stores digitize their operations.
 
-"Laravel" "React" "MySQL" "Product"
+Focused on:
 
-</div>
+- Product strategy
+- Full-stack development
+- Business process digitization
+- Inventory management
+- Digital storefront
+- Automation & operational workflows
 
-<!-- ========================= --><!-- ANIMATED WAVE --><!-- ========================= --><div align="center"><img src="https://capsule-render.vercel.app/api?type=waving&height=100&section=footer&color=36BCF7" width="100%" /></div>
+"Laravel" · "React" · "MySQL" · "Product Development"
 
-📊 GitHub Activity
+---
 
-<div align="center"><img src="https://github-readme-stats.vercel.app/api?username=Da-Rookie&show_icons=true&hide_border=true&rank_icon=github" height="160" /><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Da-Rookie&layout=compact&hide_border=true&langs_count=6" height="160" /><br><br>
+🏥 HRIS & Attendance System
 
-<img src="https://streak-stats.demolab.com?user=Da-Rookie&hide_border=true" height="160" /></div>
+Full-stack internship project for PT Pertamina Bina Medika IHC, focused on employee management and attendance digitization.
 
-<div align="center"><img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=16&duration=2500&pause=1000&center=true&vCenter=true&width=600&lines=Always+learning.+Always+building.;Turning+ideas+into+digital+solutions.;Build.+Automate.+Analyze.+Improve." /><br><br>
+Key capabilities included:
 
-<a href="https://www.linkedin.com/in/eko-prstyo">
-  <img src="https://img.shields.io/badge/Let's%20Connect-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
-</a><br><br>
+- Employee master data
+- Attendance management
+- Face recognition
+- GPS-based location validation
+- HR information management
 
-<sub>⚡ Building technology with purpose.</sub>
+"Laravel" · "MySQL" · "Tailwind CSS" · "Face Recognition" · "Google Maps API"
 
-</div>
+---
+
+📚 Currently Exploring
+
+AI:
+  - Generative AI
+  - LLM Applications
+  - RAG
+  - NLP
+  - AI Agents
+
+Automation:
+  - n8n
+  - Workflow Automation
+  - Business Process Automation
+  - AI-powered Workflows
+
+Engineering:
+  - Full-Stack Development
+  - Backend Architecture
+  - API Development
+  - Redis & Caching
+
+Data:
+  - Data Analytics
+  - Applied AI
+  - Data Visualization
+  - Business Intelligence
+
+---
+
+🧠 My Approach
+
+«Technology should solve problems, not just demonstrate technology.»
+
+I enjoy working across the full lifecycle of a digital solution:
+
+Problem → Research → Product → Engineering → Data → Automation → Impact
+
+This allows me to bridge the gap between technical implementation and business objectives.
+
+---
+
+📈 GitHub Activity
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=Da-Rookie&show_icons=true&hide_border=true&rank_icon=github" height="170" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Da-Rookie&layout=compact&hide_border=true" height="170" />
+</p><p align="center">
+  <img src="https://streak-stats.demolab.com?user=Da-Rookie&hide_border=true" />
+</p>---
+
+🤝 Let's Connect
+
+I'm open to opportunities, collaborations, product ideas, and conversations around:
+
+AI · Automation · Software Engineering · Data · Digital Product · Business Development
+
+<p align="center">
+  <a href="https://www.linkedin.com/in/eko-prstyo">
+    <img src="https://img.shields.io/badge/Let's_connect-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="https://github.com/Da-Rookie">
+    <img src="https://img.shields.io/badge/Explore_my_work-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+  </a>
+</p><p align="center">
+  <i>Building with code. Thinking with data. Automating for impact.</i>
+</p>
