@@ -247,4 +247,4 @@ AI · Automation · Software Engineering · Data · Digital Product · Business 
   </a>
 </p><p align="center">
   <i>Building with code. Thinking with data. Automating for impact.</i>
-</p>
+</p> 
