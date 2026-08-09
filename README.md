@@ -40,27 +40,6 @@ Still shipping. 🚀
 
 <div align="center"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2200&pause=800&center=true&vCenter=true&width=650&lines=Web+Applications;Backend+Systems;AI-powered+Applications;Automation+Workflows;Data+Analytics;Digital+Products" /></div>
 
-💻 Software
-   └── Web Apps
-   └── Backend Systems
-   └── REST APIs
-
-🤖 AI
-   └── LLM Applications
-   └── NLP
-   └── RAG
-   └── AI Agents
-
-⚙️ Automation
-   └── n8n Workflows
-   └── API Integration
-   └── Business Process Automation
-
-📊 Data
-   └── Data Analysis
-   └── Data Visualization
-   └── Business Intelligence
-
 
 🛠️ "$ ls -la tech-stack/"
 
