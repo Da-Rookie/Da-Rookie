@@ -1,0 +1,10 @@
+{
+  "description": "Showcases a professional portfolio highlighting skills, experience, projects, and achievements with a polished, responsive, and accessible design.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
