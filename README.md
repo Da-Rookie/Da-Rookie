@@ -1,5 +1,7 @@
 <!-- ============================= --><!-- HERO --><!-- ============================= -->
-<div align="center"><img src="img/Banner.png" alt="Eko Prasetyo Banner" width="100%" /><br><br>
+<div align="center">
+  <!-- <img src="img/Banner.png" alt="Eko Prasetyo Banner" width="100%" /> -->
+  <br><br>
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=24&duration=2500&pause=900&color=36BCF7&center=true&vCenter=true&width=700&lines=%24+whoami;Eko+Prasetyo;Full-Stack+Developer;Learning+AI+%26+Automation;Building+things+with+code..." /><br>> 
 Hello World! 👋
