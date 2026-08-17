@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: parseInt(process.env.PORT || '8443'),
       strictPort: true,
-      allowedHosts: ['f547-2001-448a-2004-4e14-9c48-dc47-5eb5-d36c.ngrok-free.app'],
+      allowedHosts: true,
       watch: { ignored: ['**/.figma/**'] },
     },
     preview: {
