@@ -1,67 +1,119 @@
-import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import SplashScreen from "@/components/SplashScreen";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import Hero from "@/components/sections/Hero";
-import CapabilityBento from "@/components/sections/CapabilityBento";
-import About from "@/components/sections/About";
-import Projects from "@/components/sections/Projects";
-import Experience from "@/components/sections/Experience";
-import Publications from "@/components/sections/Publications";
-import Skills from "@/components/sections/Skills";
-import Achievements from "@/components/sections/Achievements";
-import Education from "@/components/sections/Education";
-import Contact from "@/components/sections/Contact";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { BottomDock } from "@/components/navigation/BottomDock";
+import { SplashScreenV2 } from "@/components/motion/SplashScreenV2";
+import { RouterProvider, useRouter } from "@/lib/router";
+import { HomePage } from "@/pages/Home";
+import { AboutPage } from "@/pages/About";
+import { ExperiencePage } from "@/pages/Experience";
+import { RecognitionPage } from "@/pages/Recognition";
+import { ContactPage } from "@/pages/Contact";
+import { ProjectDetailPage } from "@/pages/ProjectDetail";
 
-export default function App() {
-  const [splashDone, setSplashDone] = useState(false);
+const pageMeta: Record<string, { title: string; description: string }> = {
+  "/": {
+    title: "Eko Prasetyo Pratomo — Full-Stack Developer, AI Engineer & Project Manager",
+    description: "Portfolio of Eko Prasetyo Pratomo — Full-Stack Developer, AI Engineer, and Project Manager building digital products, intelligent systems, and automation for real operational needs.",
+  },
+  "/about": {
+    title: "About — Eko Prasetyo Pratomo",
+    description: "About Eko Prasetyo Pratomo: engineering, AI, automation, project management, skills, capabilities, and education.",
+  },
+  "/experience": {
+    title: "Experience — Eko Prasetyo Pratomo",
+    description: "Professional experience of Eko Prasetyo Pratomo across software engineering, AI engineering, product technology, operations, and project management.",
+  },
+  "/recognition": {
+    title: "Recognition — Eko Prasetyo Pratomo",
+    description: "Achievements, publications, and professional certificates of Eko Prasetyo Pratomo.",
+  },
+  "/contact": {
+    title: "Contact — Eko Prasetyo Pratomo",
+    description: "Contact Eko Prasetyo Pratomo for software, AI, automation, technical collaboration, project collaboration, and professional opportunities.",
+  },
+};
 
-  const handleSplashComplete = useCallback(() => {
-    setSplashDone(true);
-  }, []);
+function updateMeta(title: string, description: string) {
+  document.title = title;
+  let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "description";
+    document.head.appendChild(meta);
+  }
+  meta.content = description;
+}
+
+function PortfolioApp() {
+  const { pathname } = useRouter();
+  const [ready, setReady] = useState(false);
+
+  const completeSplash = useCallback(() => setReady(true), []);
+
+  const route = useMemo(() => {
+    if (pathname === "/") return <HomePage />;
+    if (pathname === "/about") return <AboutPage />;
+    if (pathname === "/experience") return <ExperiencePage />;
+    if (pathname === "/recognition") return <RecognitionPage />;
+    if (pathname === "/contact") return <ContactPage />;
+    if (pathname.startsWith("/projects/")) {
+      const slug = decodeURIComponent(pathname.replace("/projects/", ""));
+      return <ProjectDetailPage slug={slug} />;
+    }
+    return <ProjectDetailPage slug="__not-found__" />;
+  }, [pathname]);
+
+  useEffect(() => {
+    const direct = pageMeta[pathname];
+    if (direct) {
+      updateMeta(direct.title, direct.description);
+      return;
+    }
+
+    if (pathname.startsWith("/projects/")) {
+      const slug = pathname.replace("/projects/", "");
+      const readable = slug.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+      updateMeta(`${readable} — Eko Prasetyo Pratomo`, `Project case study by Eko Prasetyo Pratomo: ${readable}.`);
+      return;
+    }
+
+    updateMeta("Eko Prasetyo Pratomo — Portfolio", "Portfolio of Eko Prasetyo Pratomo.");
+  }, [pathname]);
 
   return (
-    <>
-      {/* Cinematic splash — renders above everything, exits gracefully */}
-      <SplashScreen onComplete={handleSplashComplete} />
-
-      {/* Main site — fades in seamlessly after splash exits */}
-      <AnimatePresence>
-        {splashDone && (
-          <motion.div
-            key="main-content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="min-h-screen bg-[#E4E5DB] text-[#152A38] overflow-x-hidden"
-          >
-            <a
-              href="#hero"
-              className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-[#2F5241] focus:text-[#E4E5DB] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:border focus:border-[#152A38]"
-            >
-              Skip to main content
-            </a>
-
-            <Navbar />
-
-            <main role="main">
-              <Hero />
-              <CapabilityBento />
-              <About />
-              <Projects />
-              <Experience />
-              <Publications />
-              <Skills />
-              <Achievements />
-              <Education />
-              <Contact />
-            </main>
-
-            <Footer />
-          </motion.div>
-        )}
+    <div className="heritage-app">
+      <AnimatePresence mode="wait">
+        {!ready ? <SplashScreenV2 key="splash" onComplete={completeSplash} /> : null}
       </AnimatePresence>
-    </>
+
+      {ready ? (
+        <>
+          <a className="skip-link" href="#main-content">Skip to main content</a>
+          <div id="main-content" tabIndex={-1}>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                className="route-scene"
+                key={pathname}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {route}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <BottomDock />
+        </>
+      ) : null}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <RouterProvider>
+      <PortfolioApp />
+    </RouterProvider>
   );
 }

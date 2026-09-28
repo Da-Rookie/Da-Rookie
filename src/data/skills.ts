@@ -7,50 +7,55 @@ export interface SkillGroup {
 
 export const skillGroups: SkillGroup[] = [
   {
-    id: "software",
-    category: "Software Engineering",
+    id: "engineering",
+    category: "Engineering",
     icon: "code",
     items: [
-      "PHP", "JavaScript", "TypeScript", "Python", "SQL",
-      "Laravel", "React.js", "Next.js", "Node.js", "FastAPI",
-      "Inertia.js", "Livewire", "Tailwind CSS", "Vite",
+      "React", "TypeScript", "Laravel", "PHP", "FastAPI", "Python", "Flutter", "REST API",
+      "Next.js", "Inertia.js", "Livewire", "Tailwind CSS", "Vite",
     ],
   },
   {
-    id: "ai-data",
-    category: "AI & Data",
+    id: "ai",
+    category: "AI",
     icon: "brain",
     items: [
-      "Artificial Intelligence", "Generative AI", "AI Engineering", "NLP",
-      "Machine Learning", "LangChain", "Pandas", "NumPy", "Matplotlib",
-      "Scikit-learn", "Jupyter", "ydata-profiling", "PySpark", "Apache Spark", "Big Data",
+      "LLM", "RAG", "LangChain", "AI Agent", "OpenAI", "Ollama",
+      "Generative AI", "NLP", "Machine Learning",
     ],
-  },
-  {
-    id: "infrastructure",
-    category: "Infrastructure",
-    icon: "server",
-    items: ["MySQL", "PostgreSQL", "Redis", "Docker", "Linux", "Git", "Vercel", "ngrok"],
   },
   {
     id: "automation",
     category: "Automation",
     icon: "zap",
     items: [
-      "n8n", "Business Process Automation", "AI Automation",
-      "Data Automation", "Workflow Automation", "Zapier",
+      "n8n", "Webhook", "REST Integration", "Workflow Automation",
+      "Business Process Automation", "AI Automation", "Data Automation",
     ],
   },
   {
-    id: "product",
-    category: "Product & Management",
+    id: "data",
+    category: "Data",
+    icon: "chart",
+    items: [
+      "Pandas", "NumPy", "Scikit-learn", "RFM", "Time Series", "Power BI",
+      "Matplotlib", "Jupyter", "PySpark", "Apache Spark",
+    ],
+  },
+  {
+    id: "infrastructure",
+    category: "Infrastructure",
+    icon: "server",
+    items: ["PostgreSQL", "MySQL", "Redis", "Docker", "Linux", "Git", "GitHub", "Vercel", "ngrok"],
+  },
+  {
+    id: "leadership",
+    category: "Project & Leadership",
     icon: "layers",
     items: [
-      "SaaS Architecture", "Multi-tenancy", "System Architecture",
-      "Product Development", "Product Strategy", "Technical Roadmapping",
-      "Business Model Development", "Agile", "Project Management",
-      "Project Planning", "Project Scheduling", "Sprint Planning",
-      "Backlog Management", "Stakeholder Management", "Cross-functional Coordination",
+      "Project Management", "Project Monitoring", "Timeline Management", "Milestone Tracking",
+      "Cross-functional Coordination", "Stakeholder Management", "Technology Planning",
+      "Product Thinking", "Agile", "Sprint Planning", "Backlog Management",
     ],
   },
 ];
