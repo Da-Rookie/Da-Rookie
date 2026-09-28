@@ -1,10 +1,13 @@
 import { RouterProvider, useRouter } from "@/lib/router";
 import { HomePage } from "@/pages/Home";
 import { AboutPage } from "@/pages/About";
+import { ExperiencePage } from "@/pages/Experience";
 
 function Pages() {
   const { pathname } = useRouter();
-  return pathname === "/about" ? <AboutPage /> : <HomePage />;
+  if (pathname === "/about") return <AboutPage />;
+  if (pathname === "/experience") return <ExperiencePage />;
+  return <HomePage />;
 }
 
 export default function App() {
