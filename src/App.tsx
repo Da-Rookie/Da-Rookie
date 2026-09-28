@@ -4,7 +4,6 @@ import { AboutPage } from "@/pages/About";
 import { ExperiencePage } from "@/pages/Experience";
 import { RecognitionPage } from "@/pages/Recognition";
 import { ContactPage } from "@/pages/Contact";
-import { ProjectDetailPage } from "@/pages/ProjectDetail";
 
 function Pages() {
   const { pathname } = useRouter();
@@ -12,9 +11,6 @@ function Pages() {
   if (pathname === "/experience") return <ExperiencePage />;
   if (pathname === "/recognition") return <RecognitionPage />;
   if (pathname === "/contact") return <ContactPage />;
-  if (pathname.startsWith("/projects/")) {
-    return <ProjectDetailPage slug={decodeURIComponent(pathname.replace("/projects/", ""))} />;
-  }
   return <HomePage />;
 }
 
