@@ -13,17 +13,15 @@ export const achievements: Achievement[] = [
     title: "Pekan Inovasi 2025",
     award: "Gold Medal",
     project: "Klik Kelontong",
-    description:
-      "Gold Medal at Pekan Inovasi 2025, awarded for innovation and technical excellence in digital product development for Indonesian MSMEs.",
+    description: "Received a Gold Medal at Pekan Inovasi 2025 for Klik Kelontong.",
     year: "2025",
   },
   {
     id: "p2mw",
     title: "P2MW 2025",
-    award: "P2MW 2025 Grant Recipient",
+    award: "P2MW 2025 Funding Recipient",
     project: "Klik Kelontong",
-    description:
-      "Selected as a P2MW 2025 grant recipient, demonstrating strong innovation, entrepreneurship, product development potential, and business viability.",
+    description: "Received P2MW 2025 funding for the development of Klik Kelontong.",
     year: "2025",
   },
 ];
