@@ -4,122 +4,105 @@ import { Volume2, VolumeX } from 'lucide-react';
 const STORAGE_KEY = 'heritage-v2-sound';
 
 type AmbientRig = {
-  ctx: AudioContext;
+  context: AudioContext;
+  oscillator: OscillatorNode;
+  overtone: OscillatorNode;
   master: GainNode;
-  oscillators: OscillatorNode[];
-  lfos: OscillatorNode[];
 };
 
-function createAmbientRig(): AmbientRig {
-  const AudioContextClass = window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!AudioContextClass) throw new Error('Web Audio API unavailable');
+function makeRig(): AmbientRig {
+  const context = new AudioContext();
+  const master = context.createGain();
+  const filter = context.createBiquadFilter();
+  const oscillator = context.createOscillator();
+  const overtone = context.createOscillator();
+  const baseGain = context.createGain();
+  const overtoneGain = context.createGain();
 
-  const ctx = new AudioContextClass();
-  const master = ctx.createGain();
-  const filter = ctx.createBiquadFilter();
   master.gain.value = 0;
   filter.type = 'lowpass';
-  filter.frequency.value = 980;
-  filter.Q.value = 0.35;
+  filter.frequency.value = 720;
+  filter.Q.value = 0.25;
+
+  oscillator.type = 'sine';
+  oscillator.frequency.value = 65.406;
+  baseGain.gain.value = 0.68;
+
+  overtone.type = 'sine';
+  overtone.frequency.value = 98;
+  overtone.detune.value = -4;
+  overtoneGain.gain.value = 0.28;
+
+  oscillator.connect(baseGain);
+  overtone.connect(overtoneGain);
+  baseGain.connect(master);
+  overtoneGain.connect(master);
   master.connect(filter);
-  filter.connect(ctx.destination);
+  filter.connect(context.destination);
 
-  const tones = [65.406, 98, 130.813, 164.814];
-  const oscillators: OscillatorNode[] = [];
-  const lfos: OscillatorNode[] = [];
+  oscillator.start();
+  overtone.start();
 
-  tones.forEach((frequency, index) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const lfo = ctx.createOscillator();
-    const lfoDepth = ctx.createGain();
-
-    osc.type = index % 2 === 0 ? 'sine' : 'triangle';
-    osc.frequency.value = frequency;
-    osc.detune.value = index * 2.5 - 3;
-    gain.gain.value = 0.11 / (index + 1);
-
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.024 + index * 0.006;
-    lfoDepth.gain.value = 0.025 / (index + 1);
-    lfo.connect(lfoDepth);
-    lfoDepth.connect(gain.gain);
-
-    osc.connect(gain);
-    gain.connect(master);
-    osc.start();
-    lfo.start();
-    oscillators.push(osc);
-    lfos.push(lfo);
-  });
-
-  return { ctx, master, oscillators, lfos };
+  return { context, oscillator, overtone, master };
 }
 
 export default function AudioControl() {
   const rigRef = useRef<AmbientRig | null>(null);
-  const [enabled, setEnabled] = useState(() => {
+  const [enabled, setEnabled] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     return window.localStorage.getItem(STORAGE_KEY) !== 'off';
   });
   const [blocked, setBlocked] = useState(false);
 
-  const ensureRig = async () => {
+  const fadeTo = async (target: number) => {
     try {
-      if (!rigRef.current) rigRef.current = createAmbientRig();
+      if (!rigRef.current) rigRef.current = makeRig();
       const rig = rigRef.current;
-      await rig.ctx.resume();
-      const now = rig.ctx.currentTime;
+      if (target > 0) await rig.context.resume();
+      const now = rig.context.currentTime;
       rig.master.gain.cancelScheduledValues(now);
       rig.master.gain.setValueAtTime(rig.master.gain.value, now);
-      rig.master.gain.linearRampToValueAtTime(0.055, now + 1.8);
+      rig.master.gain.linearRampToValueAtTime(target, now + (target > 0 ? 1.6 : 0.55));
       setBlocked(false);
-      return true;
     } catch {
-      setBlocked(true);
-      return false;
+      if (target > 0) setBlocked(true);
     }
   };
 
-  const silence = () => {
-    const rig = rigRef.current;
-    if (!rig) return;
-    const now = rig.ctx.currentTime;
-    rig.master.gain.cancelScheduledValues(now);
-    rig.master.gain.setValueAtTime(rig.master.gain.value, now);
-    rig.master.gain.linearRampToValueAtTime(0, now + 0.7);
-  };
-
   useEffect(() => {
-    if (enabled) void ensureRig();
-
     const unlock = () => {
-      if (enabled && rigRef.current?.ctx.state !== 'running') void ensureRig();
+      if (enabled) void fadeTo(0.045);
     };
-    window.addEventListener('pointerdown', unlock, { passive: true });
-    window.addEventListener('keydown', unlock);
+
+    if (enabled) void fadeTo(0.045);
+    window.addEventListener('pointerdown', unlock, { passive: true, once: true });
+    window.addEventListener('keydown', unlock, { once: true });
 
     return () => {
       window.removeEventListener('pointerdown', unlock);
       window.removeEventListener('keydown', unlock);
-      rigRef.current?.oscillators.forEach((osc) => osc.stop());
-      rigRef.current?.lfos.forEach((lfo) => lfo.stop());
-      void rigRef.current?.ctx.close();
+      const rig = rigRef.current;
+      if (rig) {
+        try { rig.oscillator.stop(); } catch { /* already stopped */ }
+        try { rig.overtone.stop(); } catch { /* already stopped */ }
+        void rig.context.close();
+      }
       rigRef.current = null;
     };
   }, []);
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, enabled ? 'on' : 'off');
-    if (enabled) void ensureRig();
+    if (enabled) void fadeTo(0.045);
     else {
-      silence();
+      void fadeTo(0);
       setBlocked(false);
     }
   }, [enabled]);
 
   return (
     <button
+      type="button"
       className="audio-control"
       onClick={() => setEnabled((value) => !value)}
       aria-label={enabled ? 'Mute ambient sound' : 'Enable ambient sound'}
