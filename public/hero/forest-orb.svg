@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" fill="none">
+  <defs>
+    <radialGradient id="g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(292 245) rotate(48) scale(572 540)">
+      <stop stop-color="#E4E5DB"/>
+      <stop offset=".16" stop-color="#9AAF9F"/>
+      <stop offset=".34" stop-color="#496D5A"/>
+      <stop offset=".51" stop-color="#C7D1C5"/>
+      <stop offset=".69" stop-color="#2F5241"/>
+      <stop offset=".88" stop-color="#1C3328"/>
+      <stop offset="1" stop-color="#10241B"/>
+    </radialGradient>
+    <linearGradient id="hi" x1="188" y1="161" x2="718" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity=".8"/>
+      <stop offset=".28" stop-color="#fff" stop-opacity=".06"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity=".36"/>
+      <stop offset=".74" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="28" stdDeviation="28" flood-color="#07150E" flood-opacity=".3"/></filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M211 202c106-101 278-132 409-55 132 77 205 241 159 387-45 143-203 249-351 225-151-24-269-149-285-298-11-99 18-189 68-259Z" fill="url(#g)"/>
+    <path d="M255 188c79-48 182-64 267-35 69 23 119 68 145 121-75-31-146-34-216-13-73 22-133 64-181 124-24-64-27-133-15-197Z" fill="url(#hi)" opacity=".72"/>
+  </g>
+</svg>
