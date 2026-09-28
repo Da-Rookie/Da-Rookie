@@ -74,11 +74,6 @@ export function HeroV2() {
           </div>
         </div>
       </div>
-
-      <div className="hero-v2__interaction-note" aria-hidden="true">
-        <span className="hero-v2__interaction-dot" />
-        <span>Move / drag to reveal another dimension</span>
-      </div>
     </section>
   );
 }
