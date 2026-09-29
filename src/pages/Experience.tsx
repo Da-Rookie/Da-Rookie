@@ -1,103 +1,83 @@
-import { ArrowUpRight } from "lucide-react";
-import { experiences } from "@/data/experience";
-import { AppLink } from "@/lib/router";
-
-export function ExperiencePage() {
-  const current = experiences.filter((item) => !item.endDate);
-  const past = experiences.filter((item) => item.endDate);
-
+import { experiences, type Experience } from "@/data/experience";
+import { PageHeading } from "@/components/ui/PageHeading";
+import { NextChapter } from "@/components/ui/NextChapter";
+function Role({
+  item,
+  index,
+  current = false,
+}: {
+  item: Experience;
+  index: number;
+  current?: boolean;
+}) {
   return (
-    <main className="page page--inner">
-      <header className="page-hero page-hero--experience">
-        <div className="page-hero__index">03</div>
-        <div className="section-eyebrow">EXPERIENCE / CAREER JOURNEY</div>
-        <h1>Built across engineering, operations, product, and project delivery.</h1>
-        <div className="page-hero__support">
-          <p>
-            A career path shaped by building systems, understanding operational work, and coordinating the people and decisions around delivery.
-          </p>
-        </div>
-      </header>
-
-      <section className="editorial-section current-roles" aria-labelledby="current-roles-heading">
-        <div className="section-heading-row section-heading-row--compact">
-          <div>
-            <div className="section-eyebrow">CURRENT / PARALLEL ROLES</div>
-            <h2 id="current-roles-heading">Working across two active positions.</h2>
+    <article
+      className={`career-entry ${current ? "career-entry--current" : ""}`}
+    >
+      <div className="career-period">
+        <span className="career-number">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <p>
+          {item.id === "pertamedika-ai" ? "August 2026" : item.startDate}
+          <br />
+          <span>— {item.endDate ?? "Present"}</span>
+        </p>
+        {current && <span className="current-label">CURRENT</span>}
+      </div>
+      <div className="career-body">
+        <div className="career-heading">
+          <h3>{item.position}</h3>
+          <p>{item.company}</p>
+          <div className="career-meta">
+            {[item.employmentType, item.workMode, item.location]
+              .filter(Boolean)
+              .join(" · ")}
           </div>
-          <span className="section-count">{String(current.length).padStart(2, "0")}</span>
         </div>
-
-        <div className="current-role-grid">
-          {current.map((item) => (
-            <article className="current-role-card" key={item.id}>
-              <div className="current-role-card__top">
-                <span className="current-indicator"><i /> CURRENT</span>
-                <span>{item.startDate} — Present</span>
-              </div>
-              <h3>{item.position}</h3>
-              <p className="current-role-card__company">{item.company}</p>
-              <div className="current-role-card__meta">
-                {item.employmentType ? <span>{item.employmentType}</span> : null}
-                <span>{item.workMode}</span>
-                {item.location ? <span>{item.location}</span> : null}
-              </div>
-              <ul className="experience-copy">
-                {item.description.map((description) => (
-                  <li key={description}>{description}</li>
-                ))}
-              </ul>
-            </article>
+        <ul>
+          {item.description.map((text) => (
+            <li key={text}>{text}</li>
           ))}
+        </ul>
+      </div>
+    </article>
+  );
+}
+export function ExperiencePage() {
+  const current = experiences.filter((e) => !e.endDate),
+    past = experiences.filter((e) => e.endDate);
+  return (
+    <main className="page page--experience">
+      <PageHeading
+        index="03"
+        label="EXPERIENCE"
+        description="A path through operations, engineering, product, and project delivery. Each chapter adds another perspective to the work."
+      >
+        Always building.
+        <br />
+        <em>Always becoming.</em>
+      </PageHeading>
+      <section className="career-current section-pad">
+        <div className="section-top">
+          <h2 className="eyebrow">NOW / TWO PARALLEL CHAPTERS</h2>
+          <span>2026 — PRESENT</span>
         </div>
+        {current.map((item, index) => (
+          <Role item={item} index={index} current key={item.id} />
+        ))}
       </section>
-
-      <section className="editorial-section timeline-section" aria-labelledby="past-experience-heading">
-        <div className="section-eyebrow">PREVIOUS / PROGRESSION</div>
-        <h2 id="past-experience-heading" className="sr-only">Previous experience</h2>
-        <div className="experience-timeline">
-          {past.map((item, index) => (
-            <article className="timeline-entry" key={item.id}>
-              <div className="timeline-entry__rail" aria-hidden="true">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <i />
-              </div>
-              <div className="timeline-entry__period">
-                <span>{item.startDate}</span>
-                <span>— {item.endDate}</span>
-              </div>
-              <div className="timeline-entry__body">
-                <div className="timeline-entry__heading">
-                  <div>
-                    <h3>{item.position}</h3>
-                    <p>{item.company}</p>
-                  </div>
-                  <div className="timeline-entry__meta">
-                    {item.employmentType ? <span>{item.employmentType}</span> : null}
-                    <span>{item.workMode}</span>
-                    {item.location ? <span>{item.location}</span> : null}
-                  </div>
-                </div>
-                <ul className="experience-copy">
-                  {item.description.map((description) => (
-                    <li key={description}>{description}</li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          ))}
-        </div>
+      <section className="career-past section-pad">
+        <h2 className="eyebrow">THE PATH SO FAR</h2>
+        {past.map((item, index) => (
+          <Role item={item} index={index + current.length} key={item.id} />
+        ))}
       </section>
-
-      <section className="editorial-section next-page" aria-labelledby="experience-next-heading">
-        <div>
-          <div className="section-eyebrow">NEXT / RECOGNITION</div>
-          <h2 id="experience-next-heading">Evidence beyond the timeline.</h2>
-        </div>
-        <AppLink href="/recognition" className="button-link">
-          View Recognition <ArrowUpRight size={18} aria-hidden="true" />
-        </AppLink>
-      </section>
+      <NextChapter
+        label="04 / RECOGNITION"
+        title="The evidence along the way."
+        href="/recognition"
+      />
     </main>
   );
 }

@@ -8,114 +8,102 @@ import {
   useMemo,
   useState,
 } from "react";
-
-interface RouterContextValue {
+type RouteState = { path: string; restoreY: number | null; id: number };
+const RouterContext = createContext<{
   pathname: string;
+  state: RouteState;
   navigate: (to: string) => void;
-}
-
-const RouterContext = createContext<RouterContextValue | null>(null);
-
-function currentPath() {
-  return `${window.location.pathname}${window.location.search}${window.location.hash}`;
-}
-
-function pathnameOnly(path: string) {
-  return path.split(/[?#]/)[0] || "/";
-}
-
+} | null>(null);
+const currentPath = () =>
+  window.location.pathname + window.location.search + window.location.hash;
 export function RouterProvider({ children }: { children: ReactNode }) {
-  const [path, setPath] = useState(() => currentPath());
-
+  const [state, setState] = useState<RouteState>(() => ({
+    path: currentPath(),
+    restoreY: null,
+    id: 0,
+  }));
   useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-
-    const handlePopState = (event: PopStateEvent) => {
-      setPath(currentPath());
-      const scrollY = typeof event.state?.scrollY === "number" ? event.state.scrollY : 0;
-      requestAnimationFrame(() => window.scrollTo({ top: scrollY, behavior: "auto" }));
+    history.scrollRestoration = "manual";
+    let lastPopPath: string | null = null;
+    const pop = (e: PopStateEvent) => {
+      lastPopPath = currentPath();
+      setState((s) => ({
+        path: currentPath(),
+        restoreY: typeof e.state?.scrollY === "number" ? e.state.scrollY : null,
+        id: s.id + 1,
+      }));
     };
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
-
-  const navigate = useCallback((to: string) => {
-    const target = new URL(to, window.location.origin);
-    const next = `${target.pathname}${target.search}${target.hash}`;
-    const now = currentPath();
-
-    if (next === now) {
-      if (target.hash) {
-        document.querySelector(target.hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+    const hash = () => {
+      if (lastPopPath === currentPath()) {
+        lastPopPath = null;
+        return;
       }
-      return;
-    }
-
-    window.history.replaceState({ ...window.history.state, scrollY: window.scrollY }, "");
-    window.history.pushState({ scrollY: 0 }, "", next);
-    setPath(next);
-
-    if (target.hash) {
-      requestAnimationFrame(() => {
-        document.querySelector(target.hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    } else {
-      window.scrollTo({ top: 0, behavior: "auto" });
-    }
+      setState((s) => ({ path: currentPath(), restoreY: null, id: s.id + 1 }));
+    };
+    window.addEventListener("popstate", pop);
+    window.addEventListener("hashchange", hash);
+    return () => {
+      window.removeEventListener("popstate", pop);
+      window.removeEventListener("hashchange", hash);
+    };
   }, []);
-
+  const navigate = useCallback((to: string) => {
+    const target = new URL(to, location.origin);
+    history.replaceState({ ...history.state, scrollY: window.scrollY }, "");
+    if (currentPath() !== target.pathname + target.search + target.hash)
+      history.pushState({ scrollY: 0 }, "", to);
+    setState((s) => ({ path: currentPath(), restoreY: null, id: s.id + 1 }));
+  }, []);
   const value = useMemo(
-    () => ({ pathname: pathnameOnly(path), navigate }),
-    [path, navigate],
+    () => ({ pathname: state.path.split(/[?#]/)[0] || "/", state, navigate }),
+    [state, navigate],
   );
-
-  return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>;
+  return (
+    <RouterContext.Provider value={value}>{children}</RouterContext.Provider>
+  );
 }
-
 export function useRouter() {
   const context = useContext(RouterContext);
-  if (!context) throw new Error("useRouter must be used inside RouterProvider");
+  if (!context) throw new Error("RouterProvider required");
   return context;
 }
-
-interface AppLinkProps {
+export function AppLink({
+  href,
+  children,
+  className,
+  ariaLabel,
+  onClick,
+}: {
   href: string;
   children: ReactNode;
   className?: string;
   ariaLabel?: string;
   onClick?: () => void;
-}
-
-export function AppLink({ href, children, className, ariaLabel, onClick }: AppLinkProps) {
-  const { navigate } = useRouter();
-
-  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+}) {
+  const { navigate, pathname } = useRouter();
+  function click(e: MouseEvent<HTMLAnchorElement>) {
     if (
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    ) {
+      e.defaultPrevented ||
+      e.button !== 0 ||
+      e.metaKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.altKey
+    )
       return;
-    }
-
-    const url = new URL(href, window.location.origin);
-    if (url.origin !== window.location.origin) return;
-
-    event.preventDefault();
+    if (new URL(href, location.origin).origin !== location.origin) return;
+    e.preventDefault();
     onClick?.();
     navigate(href);
-  };
-
+  }
   return (
-    <a href={href} className={className} aria-label={ariaLabel} onClick={handleClick}>
+    <a
+      href={href}
+      className={className}
+      aria-label={ariaLabel}
+      aria-current={href === pathname ? "page" : undefined}
+      onClick={click}
+    >
       {children}
     </a>
   );

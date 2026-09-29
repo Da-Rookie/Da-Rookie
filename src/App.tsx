@@ -1,5 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useLayoutEffect,
+  type ReactNode,
+} from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Masthead } from "@/components/layout/Masthead";
+import { projects } from "@/data/projects";
 import { BottomDock } from "@/components/navigation/BottomDock";
 import { SplashScreenV2 } from "@/components/motion/SplashScreenV2";
 import { RouterProvider, useRouter } from "@/lib/router";
@@ -12,7 +21,8 @@ import { ProjectDetailPage } from "@/pages/ProjectDetail";
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   "/": {
-    title: "Eko Prasetyo Pratomo — Full-Stack Developer, AI Engineer & Project Manager",
+    title:
+      "Eko Prasetyo Pratomo — Full-Stack Developer, AI Engineer & Project Manager",
     description:
       "Portfolio of Eko Prasetyo Pratomo — Full-Stack Developer, AI Engineer, and Project Manager building digital products, intelligent systems, automation, and technology projects for real operational needs.",
   },
@@ -41,19 +51,65 @@ const pageMeta: Record<string, { title: string; description: string }> = {
 function updateMeta(title: string, description: string) {
   document.title = title;
 
-  let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+  let meta = document.querySelector<HTMLMetaElement>(
+    'meta[name="description"]',
+  );
   if (!meta) {
     meta = document.createElement("meta");
     meta.name = "description";
     document.head.appendChild(meta);
   }
   meta.content = description;
+  for (const property of ["og:title", "twitter:title"])
+    document
+      .querySelector<HTMLMetaElement>(
+        `meta[property="${property}"],meta[name="${property}"]`,
+      )
+      ?.setAttribute("content", title);
+  for (const property of ["og:description", "twitter:description"])
+    document
+      .querySelector<HTMLMetaElement>(
+        `meta[property="${property}"],meta[name="${property}"]`,
+      )
+      ?.setAttribute("content", description);
+  const canonical = document.querySelector<HTMLLinkElement>(
+    'link[rel="canonical"]',
+  );
+  if (canonical) canonical.href = "https://ekoprasetyo.id" + location.pathname;
+  document
+    .querySelector('meta[property="og:url"]')
+    ?.setAttribute("content", "https://ekoprasetyo.id" + location.pathname);
 }
 
+function Scene({ children }: { children: ReactNode }) {
+  const { state } = useRouter();
+  useLayoutEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const hash = state.path.split("#")[1];
+      if (state.restoreY !== null)
+        window.scrollTo({ top: state.restoreY, behavior: "instant" });
+      else if (hash)
+        document
+          .getElementById(decodeURIComponent(hash))
+          ?.scrollIntoView({ behavior: "instant" });
+      else window.scrollTo({ top: 0, behavior: "instant" });
+      if (state.id > 0)
+        document
+          .querySelector<HTMLElement>("#main-content")
+          ?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [state.id]);
+  return <>{children}</>;
+}
 function PortfolioApp() {
   const { pathname } = useRouter();
   const reduceMotion = useReducedMotion();
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(
+    () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.location.pathname !== "/",
+  );
 
   const completeSplash = useCallback(() => setReady(true), []);
 
@@ -81,10 +137,9 @@ function PortfolioApp() {
 
     if (pathname.startsWith("/projects/")) {
       const slug = pathname.replace("/projects/", "");
-      const readable = slug
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+      const readable =
+        projects.find((project) => project.id === slug)?.title ??
+        "Project not found";
 
       updateMeta(
         `${readable} — Eko Prasetyo Pratomo`,
@@ -107,34 +162,38 @@ function PortfolioApp() {
         ) : null}
       </AnimatePresence>
 
-      {ready ? (
-        <>
-          <a className="skip-link" href="#main-content">
-            Skip to main content
-          </a>
+      <>
+        <Masthead />
+        <a className="skip-link" href="#main-content">
+          Skip to main content
+        </a>
 
-          <div id="main-content" tabIndex={-1}>
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                className="route-scene"
-                key={pathname}
-                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-                transition={
-                  reduceMotion
-                    ? { duration: 0.12 }
-                    : { duration: 0.42, ease: [0.22, 1, 0.36, 1] }
-                }
-              >
-                {route}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+        <div id="main-content" tabIndex={-1}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              className="route-scene"
+              key={pathname}
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={
+                reduceMotion
+                  ? { duration: 0.12 }
+                  : { duration: 0.25, ease: [0.22, 1, 0.36, 1] }
+              }
+            >
+              <Scene>{route}</Scene>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-          <BottomDock />
-        </>
-      ) : null}
+        <footer className="site-footer">
+          <span>© {new Date().getFullYear()} Eko Prasetyo Pratomo</span>
+          <span>BUILD · AUTOMATE · LEAD</span>
+          <span>JAKARTA, INDONESIA</span>
+        </footer>
+        <BottomDock />
+      </>
     </div>
   );
 }

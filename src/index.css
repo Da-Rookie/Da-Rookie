@@ -1,4 +1,8 @@
-@import './styles/core.css';
-@import './styles/pages.css';
-@import './styles/recognition-contact.css';
-@import './styles/responsive.css';
+@import "./styles/heritage.css";
+@font-face {
+  font-family: "Manrope Variable";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/manrope-latin.woff2") format("woff2");
+}

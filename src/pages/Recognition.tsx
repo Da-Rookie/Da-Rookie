@@ -1,119 +1,131 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Award } from "lucide-react";
 import { achievements } from "@/data/achievements";
 import { certifications } from "@/data/certifications";
 import { publications } from "@/data/publications";
-import { AppLink } from "@/lib/router";
-
+import { PageHeading } from "@/components/ui/PageHeading";
+import { NextChapter } from "@/components/ui/NextChapter";
 export function RecognitionPage() {
   return (
-    <main className="page page--inner">
-      <header className="page-hero page-hero--recognition">
-        <div className="page-hero__index">04</div>
-        <div className="section-eyebrow">RECOGNITION / EVIDENCE</div>
-        <h1>Achievements, published work, and professional credentials.</h1>
-        <div className="page-hero__support recognition-jump-links" aria-label="Recognition sections">
-          <a href="#achievements">Achievements</a>
-          <a href="#publications">Publications</a>
-          <a href="#certificates">Professional Certificates</a>
+    <main className="page page--recognition">
+      <PageHeading index="04" label="RECOGNITION">
+        A body of work.
+        <br />
+        <em>A trail of evidence.</em>
+      </PageHeading>
+      <nav
+        className="recognition-index section-pad"
+        aria-label="Recognition sections"
+      >
+        <a href="#achievements">01 / Achievements</a>
+        <a href="#publications">02 / Publications</a>
+        <a href="#certificates">03 / Professional Certificates</a>
+      </nav>
+      <section id="achievements" className="recognition-section section-pad">
+        <div className="section-top">
+          <h2>Recognition earned.</h2>
+          <span>01 / ACHIEVEMENTS</span>
         </div>
-      </header>
-
-      <section id="achievements" className="editorial-section recognition-section" aria-labelledby="achievements-heading">
-        <div className="section-heading-row">
-          <div>
-            <div className="section-eyebrow">ACHIEVEMENTS</div>
-            <h2 id="achievements-heading">Selected professional recognition.</h2>
-          </div>
-          <span className="section-count">{String(achievements.length).padStart(2, "0")}</span>
-        </div>
-        <div className="achievement-list">
-          {achievements.map((item, index) => (
-            <article className="achievement-row" key={item.id}>
-              <span className="achievement-row__number">{String(index + 1).padStart(2, "0")}</span>
-              <div>
-                <span className="achievement-row__year">{item.year}</span>
-                <h3>{item.award}</h3>
-                <p>{item.title}{item.project ? ` · ${item.project}` : ""}</p>
-              </div>
-              <p className="achievement-row__description">{item.description}</p>
+        <div className="awards">
+          {achievements.map((item) => (
+            <article key={item.id} className="award">
+              <Award size={36} strokeWidth={1} />
+              <span>{item.year}</span>
+              <h3>
+                {item.award === "Gold Medal" ? (
+                  <>
+                    Gold
+                    <br />
+                    Medal.
+                  </>
+                ) : (
+                  <>
+                    P2MW
+                    <br />
+                    Funding.
+                  </>
+                )}
+              </h3>
+              <p>
+                {item.title}
+                {item.project ? ` · ${item.project}` : ""}
+              </p>
+              <small>{item.description}</small>
             </article>
           ))}
         </div>
       </section>
-
-      <section id="publications" className="editorial-section recognition-section recognition-section--mist" aria-labelledby="publications-heading">
-        <div className="section-heading-row">
-          <div>
-            <div className="section-eyebrow">PUBLICATIONS</div>
-            <h2 id="publications-heading">Published research & community work.</h2>
-          </div>
-          <span className="section-count">{String(publications.length).padStart(2, "0")}</span>
+      <section id="publications" className="publications-section section-pad">
+        <div className="section-top">
+          <h2>Ideas in print.</h2>
+          <span>02 / PUBLICATIONS</span>
         </div>
-        <div className="publication-list">
-          {publications.map((item, index) => (
-            <article className="publication-entry" key={item.id}>
-              <div className="publication-entry__number">{String(index + 1).padStart(2, "0")}</div>
-              <div className="publication-entry__body">
-                <div className="publication-entry__meta">
-                  <span>{item.publishedDate}</span>
-                  <span>{item.accreditation}</span>
-                </div>
-                <h3>{item.title}</h3>
-                <p className="publication-entry__publisher">
-                  {item.journal ? `${item.journal} · ` : ""}{item.publisher}
-                </p>
-                <p>{item.description}</p>
-                <div className="keyword-list" aria-label="Publication keywords">
-                  {item.keywords.map((keyword) => <span key={keyword}>{keyword}</span>)}
-                </div>
-                {item.url ? (
-                  <a href={item.url} className="text-link" target="_blank" rel="noreferrer">
-                    View Publication <ArrowUpRight size={16} aria-hidden="true" />
-                  </a>
-                ) : null}
+        {publications.map((item, index) => (
+          <article className="publication" key={item.id}>
+            <div className="publication-side">
+              <span>0{index + 1}</span>
+              <span>{item.accreditation}</span>
+            </div>
+            <div>
+              <div className="eyebrow">{item.publishedDate}</div>
+              <h3>{item.title}</h3>
+              <p className="publication-publisher">
+                {item.journal ? `${item.journal} · ` : ""}
+                {item.publisher}
+              </p>
+              <p>{item.description}</p>
+              <div className="keywords">
+                {item.keywords.map((k) => (
+                  <span key={k}>{k}</span>
+                ))}
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="certificates" className="editorial-section recognition-section" aria-labelledby="certificates-heading">
-        <div className="section-heading-row">
-          <div>
-            <div className="section-eyebrow">PROFESSIONAL CERTIFICATES</div>
-            <h2 id="certificates-heading">Credentials supporting the practice.</h2>
-          </div>
-          <span className="section-count">{String(certifications.length).padStart(2, "0")}</span>
-        </div>
-        <div className="certificate-grid">
-          {certifications.map((item, index) => (
-            <article className="certificate-item" key={item.id}>
-              <div className="certificate-item__top">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <span>{item.domain}</span>
-              </div>
-              <h3>{item.name}</h3>
-              <p>{item.issuer}</p>
-              {item.year ? <small>{item.year}</small> : null}
-              {item.credentialUrl ? (
-                <a href={item.credentialUrl} target="_blank" rel="noreferrer" aria-label={`Open credential for ${item.name}`}>
-                  Credential <ArrowUpRight size={15} aria-hidden="true" />
+              {item.url && (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-link"
+                >
+                  Read Publication <ArrowUpRight size={16} />
                 </a>
-              ) : null}
-            </article>
-          ))}
-        </div>
+              )}
+            </div>
+          </article>
+        ))}
       </section>
-
-      <section className="editorial-section next-page" aria-labelledby="recognition-next-heading">
-        <div>
-          <div className="section-eyebrow">NEXT / CONTACT</div>
-          <h2 id="recognition-next-heading">Turn the evidence into a conversation.</h2>
+      <section id="certificates" className="certificates-section section-pad">
+        <div className="section-top">
+          <h2>Learning, continued.</h2>
+          <span>03 / PROFESSIONAL CERTIFICATES</span>
         </div>
-        <AppLink href="/contact" className="button-link">
-          Start a Conversation <ArrowUpRight size={18} aria-hidden="true" />
-        </AppLink>
+        {certifications.map((item, index) => (
+          <article className="certificate" key={item.id}>
+            <span className="certificate-number">0{index + 1}</span>
+            <div>
+              <h3>{item.name}</h3>
+              <p>
+                {item.issuer}
+                {item.year ? ` · ${item.year}` : ""}
+              </p>
+            </div>
+            <span className="certificate-domain">{item.domain}</span>
+            {item.credentialUrl && (
+              <a
+                href={item.credentialUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`View ${item.name} credential in new tab`}
+              >
+                <ArrowUpRight />
+              </a>
+            )}
+          </article>
+        ))}
       </section>
+      <NextChapter
+        label="05 / CONTACT"
+        title="Good work begins with a conversation."
+        href="/contact"
+      />
     </main>
   );
 }
