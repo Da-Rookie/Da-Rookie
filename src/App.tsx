@@ -1,207 +1,512 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useLayoutEffect,
-  type ReactNode,
-} from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Masthead } from "@/components/layout/Masthead";
-import { projects } from "@/data/projects";
-import { BottomDock } from "@/components/navigation/BottomDock";
-import { SplashScreenV2 } from "@/components/motion/SplashScreenV2";
-import { RouterProvider, useRouter } from "@/lib/router";
-import { HomePage } from "@/pages/Home";
-import { AboutPage } from "@/pages/About";
-import { ExperiencePage } from "@/pages/Experience";
-import { RecognitionPage } from "@/pages/Recognition";
-import { ContactPage } from "@/pages/Contact";
-import { ProjectDetailPage } from "@/pages/ProjectDetail";
-
-const pageMeta: Record<string, { title: string; description: string }> = {
-  "/": {
-    title:
-      "Eko Prasetyo Pratomo — Full-Stack Developer, AI Engineer & Project Manager",
-    description:
-      "Portfolio of Eko Prasetyo Pratomo — Full-Stack Developer, AI Engineer, and Project Manager building digital products, intelligent systems, automation, and technology projects for real operational needs.",
-  },
-  "/about": {
-    title: "About — Eko Prasetyo Pratomo",
-    description:
-      "About Eko Prasetyo Pratomo: engineering, AI, automation, project management, capabilities, skills, and education.",
-  },
-  "/experience": {
-    title: "Experience — Eko Prasetyo Pratomo",
-    description:
-      "Professional experience of Eko Prasetyo Pratomo across software engineering, AI engineering, product technology, operations, and project management.",
-  },
-  "/recognition": {
-    title: "Recognition — Eko Prasetyo Pratomo",
-    description:
-      "Achievements, publications, and professional certificates of Eko Prasetyo Pratomo.",
-  },
-  "/contact": {
-    title: "Contact — Eko Prasetyo Pratomo",
-    description:
-      "Contact Eko Prasetyo Pratomo for software, AI, automation, technical collaboration, project collaboration, and professional opportunities.",
-  },
-};
-
-function updateMeta(title: string, description: string) {
-  document.title = title;
-
-  let meta = document.querySelector<HTMLMetaElement>(
-    'meta[name="description"]',
-  );
-  if (!meta) {
-    meta = document.createElement("meta");
-    meta.name = "description";
-    document.head.appendChild(meta);
+  ArrowUpRight,
+  ArrowRight,
+  Compass,
+  Map,
+  Settings2,
+  HelpCircle,
+  X,
+  Layers,
+  UserRound,
+  BriefcaseBusiness,
+  Award,
+  Mail,
+  Volume2,
+  VolumeX,
+  RotateCcw,
+  ChevronRight,
+} from "lucide-react";
+import { World } from "./emerald/World";
+import { Content, panelTitles } from "./emerald/Content";
+import {
+  places,
+  type PanelId,
+  type PlaceId,
+  type Quality,
+} from "./emerald/topology";
+import type { EmeraldEngine, Phase } from "./emerald/engine";
+import { profile } from "./data/profile";
+import "./emerald/emerald.css";
+function readPreference(key: string, fallback: string) {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
   }
-  meta.content = description;
-  for (const property of ["og:title", "twitter:title"])
-    document
-      .querySelector<HTMLMetaElement>(
-        `meta[property="${property}"],meta[name="${property}"]`,
-      )
-      ?.setAttribute("content", title);
-  for (const property of ["og:description", "twitter:description"])
-    document
-      .querySelector<HTMLMetaElement>(
-        `meta[property="${property}"],meta[name="${property}"]`,
-      )
-      ?.setAttribute("content", description);
-  const canonical = document.querySelector<HTMLLinkElement>(
-    'link[rel="canonical"]',
-  );
-  if (canonical) canonical.href = "https://ekoprasetyo.id" + location.pathname;
-  document
-    .querySelector('meta[property="og:url"]')
-    ?.setAttribute("content", "https://ekoprasetyo.id" + location.pathname);
 }
-
-function Scene({ children }: { children: ReactNode }) {
-  const { state } = useRouter();
-  useLayoutEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      const hash = state.path.split("#")[1];
-      if (state.restoreY !== null)
-        window.scrollTo({ top: state.restoreY, behavior: "instant" });
-      else if (hash)
-        document
-          .getElementById(decodeURIComponent(hash))
-          ?.scrollIntoView({ behavior: "instant" });
-      else window.scrollTo({ top: 0, behavior: "instant" });
-      if (state.id > 0)
-        document
-          .querySelector<HTMLElement>("#main-content")
-          ?.focus({ preventScroll: true });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [state.id]);
-  return <>{children}</>;
+function savePreference(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* Preferences are optional. */
+  }
 }
-function PortfolioApp() {
-  const { pathname } = useRouter();
-  const reduceMotion = useReducedMotion();
-  const [ready, setReady] = useState(
-    () =>
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      window.location.pathname !== "/",
-  );
-
-  const completeSplash = useCallback(() => setReady(true), []);
-
-  const route = useMemo(() => {
-    if (pathname === "/") return <HomePage />;
-    if (pathname === "/about") return <AboutPage />;
-    if (pathname === "/experience") return <ExperiencePage />;
-    if (pathname === "/recognition") return <RecognitionPage />;
-    if (pathname === "/contact") return <ContactPage />;
-
-    if (pathname.startsWith("/projects/")) {
-      const slug = decodeURIComponent(pathname.replace("/projects/", ""));
-      return <ProjectDetailPage slug={slug} />;
-    }
-
-    return <ProjectDetailPage slug="__not-found__" />;
-  }, [pathname]);
-
-  useEffect(() => {
-    const direct = pageMeta[pathname];
-    if (direct) {
-      updateMeta(direct.title, direct.description);
-      return;
-    }
-
-    if (pathname.startsWith("/projects/")) {
-      const slug = pathname.replace("/projects/", "");
-      const readable =
-        projects.find((project) => project.id === slug)?.title ??
-        "Project not found";
-
-      updateMeta(
-        `${readable} — Eko Prasetyo Pratomo`,
-        `Project case study by Eko Prasetyo Pratomo: ${readable}.`,
-      );
-      return;
-    }
-
-    updateMeta(
-      "Eko Prasetyo Pratomo — Portfolio",
-      "Portfolio of Eko Prasetyo Pratomo.",
-    );
-  }, [pathname]);
-
+const navItems = [
+  { id: "works", name: "Work", icon: Layers },
+  { id: "about", name: "About", icon: UserRound },
+  { id: "experience", name: "Experience", icon: BriefcaseBusiness },
+  { id: "recognition", name: "Recognition", icon: Award },
+  { id: "contact", name: "Contact", icon: Mail },
+] as const;
+function routePanel(): PanelId | null {
+  const path = location.pathname.split("/")[1];
   return (
-    <div className="heritage-app">
-      <AnimatePresence mode="wait">
-        {!ready ? (
-          <SplashScreenV2 key="splash" onComplete={completeSplash} />
-        ) : null}
-      </AnimatePresence>
-
-      <>
-        <Masthead />
-        <a className="skip-link" href="#main-content">
-          Skip to main content
-        </a>
-
-        <div id="main-content" tabIndex={-1}>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              className="route-scene"
-              key={pathname}
-              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              transition={
-                reduceMotion
-                  ? { duration: 0.12 }
-                  : { duration: 0.25, ease: [0.22, 1, 0.36, 1] }
-              }
-            >
-              <Scene>{route}</Scene>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        <footer className="site-footer">
-          <span>© {new Date().getFullYear()} Eko Prasetyo Pratomo</span>
-          <span>BUILD · AUTOMATE · LEAD</span>
-          <span>JAKARTA, INDONESIA</span>
-        </footer>
-        <BottomDock />
-      </>
-    </div>
+    (
+      {
+        about: "about",
+        experience: "experience",
+        recognition: "recognition",
+        contact: "contact",
+        projects: "works",
+        work: "works",
+      } as Record<string, PanelId>
+    )[path] ?? null
   );
 }
-
 export default function App() {
+  const [phase, setPhase] = useState<Phase>("welcome"),
+    [panel, setPanel] = useState<PanelId | null>(routePanel),
+    [near, setNear] = useState<PlaceId | null>(null),
+    [visited, setVisited] = useState<PlaceId[]>([]);
+  const [quality, setQuality] = useState<Quality>(() => {
+    const q = readPreference("emerald-quality", "medium");
+    return ["low", "medium", "high"].includes(q) ? (q as Quality) : "medium";
+  });
+  const [reduced, setReduced] = useState(
+    () =>
+      readPreference(
+        "emerald-motion",
+        matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "reduced"
+          : "full",
+      ) === "reduced",
+  );
+  const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false),
+    [sound, setSound] = useState(false),
+    [returning] = useState(
+      () => readPreference("emerald-visited", "") === "yes",
+    );
+  const engine = useRef<EmeraldEngine | null>(null),
+    dialog = useRef<HTMLDialogElement>(null),
+    focusReturn = useRef<HTMLElement | null>(null),
+    audio = useRef<AudioContext | null>(null),
+    oscillators = useRef<OscillatorNode[]>([]);
+  const visit = useCallback(
+    (id: PlaceId) => setVisited((v) => (v.includes(id) ? v : [...v, id])),
+    [],
+  );
+  const open = useCallback((id: PanelId) => {
+    if (!dialog.current?.open)
+      focusReturn.current = document.activeElement as HTMLElement;
+    setPanel(id);
+    const path = ["map", "settings", "help"].includes(id)
+      ? location.pathname
+      : id === "works"
+        ? "/projects"
+        : `/${id}`;
+    if (location.pathname !== path) history.pushState({}, "", path);
+  }, []);
+  const close = useCallback(() => {
+    setPanel(null);
+    if (location.pathname !== "/") history.pushState({}, "", "/");
+    requestAnimationFrame(() => focusReturn.current?.focus());
+  }, []);
+  useEffect(() => {
+    if (panel) {
+      dialog.current?.showModal();
+    } else dialog.current?.close();
+  }, [panel]);
+  useEffect(() => {
+    const fn = () => setPanel(routePanel());
+    window.addEventListener("popstate", fn);
+    return () => window.removeEventListener("popstate", fn);
+  }, []);
+  useEffect(() => {
+    document.title = "Emerald Bay Lab — Eko Prasetyo Pratomo";
+    return () => {
+      audio.current?.close();
+    };
+  }, []);
+  useEffect(() => {
+    if (!audio.current) return;
+    if (panel || document.hidden) void audio.current.suspend();
+    else if (sound) void audio.current.resume();
+  }, [panel, sound]);
+  useEffect(() => {
+    const fn = () => {
+      if (document.hidden) void audio.current?.suspend();
+      else if (sound && !panel) void audio.current?.resume();
+    };
+    document.addEventListener("visibilitychange", fn);
+    return () => document.removeEventListener("visibilitychange", fn);
+  }, [sound, panel]);
+  function start(skip = false) {
+    engine.current?.start(skip);
+    savePreference("emerald-visited", "yes");
+  }
+  function onPlace(id: PlaceId) {
+    if (id === "arrival" && phase === "terminal") {
+      engine.current?.activate();
+      return;
+    }
+    const p = places.find((p) => p.id === id)!;
+    visit(id);
+    open(p.panel);
+  }
+  function travel(id: PlaceId) {
+    close();
+    engine.current?.travel(id);
+  }
+  function chooseQuality(q: Quality) {
+    setQuality(q);
+    savePreference("emerald-quality", q);
+  }
+  function chooseMotion(v: boolean) {
+    setReduced(v);
+    savePreference("emerald-motion", v ? "reduced" : "full");
+  }
+  async function toggleSound() {
+    if (sound) {
+      await audio.current?.suspend();
+      setSound(false);
+      return;
+    }
+    try {
+      if (!audio.current) {
+        const ctx = new AudioContext();
+        audio.current = ctx;
+        const master = ctx.createGain();
+        master.gain.value = 0.025;
+        master.connect(ctx.destination);
+        [130.81, 196, 261.63].forEach((freq, i) => {
+          const o = ctx.createOscillator(),
+            g = ctx.createGain();
+          o.type = "sine";
+          o.frequency.value = freq;
+          o.detune.value = i * 3;
+          g.gain.value = 0.35;
+          o.connect(g);
+          g.connect(master);
+          o.start();
+          oscillators.current.push(o);
+        });
+      }
+      await audio.current.resume();
+      setSound(true);
+    } catch {
+      setSound(false);
+    }
+  }
+  const current = places.find((p) => p.id === near);
   return (
-    <RouterProvider>
-      <PortfolioApp />
-    </RouterProvider>
+    <div
+      className={`app phase-${phase} ${failed ? "render-failed" : ""} ${reduced ? "reduced-motion" : ""}`}
+    >
+      <a
+        className="skip-link"
+        href="#portfolio-navigation"
+        onClick={() => open("about")}
+      >
+        Skip to portfolio content
+      </a>
+      {!failed && (
+        <World
+          quality={quality}
+          reduced={reduced}
+          paused={!!panel}
+          onPhase={setPhase}
+          onNear={setNear}
+          onVisit={visit}
+          onPlace={onPlace}
+          onError={() => setFailed(true)}
+          onReady={setReady}
+          engineRef={engine}
+        />
+      )}
+      <header className="masthead">
+        <button
+          className="brand"
+          aria-label="Emerald Bay Lab home"
+          onClick={() => {
+            close();
+            engine.current?.resetCamera();
+          }}
+        >
+          <span className="brand-symbol">
+            e<span>↗</span>
+          </span>
+          <span>
+            EMERALD
+            <br />
+            <b>BAY LAB</b>
+          </span>
+        </button>
+        <div className="header-center">
+          <span className="live-dot" /> PERSONAL WORLD · PORTFOLIO V3
+        </div>
+        <button className="header-contact" onClick={() => open("contact")}>
+          Let’s talk <ArrowUpRight size={15} />
+        </button>
+      </header>
+      {!failed && phase === "welcome" && (
+        <main className="welcome">
+          <div className="welcome-copy">
+            <p className="eyebrow">
+              <span className="short-line" /> WELCOME TO EMERALD BAY LAB
+            </p>
+            <h1>
+              BUILD.
+              <br />
+              AUTOMATE.
+              <br />
+              <em>LEAD.</em>
+            </h1>
+            <p className="built-by">
+              Built by <strong>Eko Prasetyo Pratomo.</strong>
+            </p>
+            <p className="welcome-identity">
+              Full-Stack Developer · AI Engineer · Project Manager
+            </p>
+            <div className="welcome-actions">
+              <button
+                className="primary"
+                disabled={!ready}
+                onClick={() => start(returning)}
+              >
+                {" "}
+                {returning ? "Return to the island" : "Enter the island"}{" "}
+                <ArrowUpRight size={18} />
+              </button>
+              <button className="welcome-direct" onClick={() => open("works")}>
+                Explore the work <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+          <div className="welcome-caption">
+            <span>01 — A WORLD OF POSSIBILITIES</span>
+            <p>
+              Technology, nature,
+              <br />
+              and a little curiosity.
+            </p>
+            <small>Arrive. Activate. Explore.</small>
+          </div>
+        </main>
+      )}
+      {phase === "arriving" && !failed && (
+        <div className="cinematic" role="status">
+          <div className="cinema-bar top" />
+          <div className="cinema-title">
+            <p className="eyebrow">WELCOME TO EMERALD BAY LAB</p>
+            <h2>BUILD. AUTOMATE. LEAD.</h2>
+            <p>Built by Eko Prasetyo Pratomo</p>
+            <small>Full-Stack Developer · AI Engineer · Project Manager</small>
+          </div>
+          <button className="skip-intro" onClick={() => engine.current?.skip()}>
+            Skip arrival <ArrowRight size={16} />
+          </button>
+          <div className="cinema-bar bottom" />
+        </div>
+      )}
+      {(phase === "terminal" || phase === "exploring") && !failed && (
+        <>
+          <div className="explore-heading">
+            <p className="eyebrow">
+              {phase === "terminal"
+                ? "ARRIVE. ACTIVATE. EXPLORE."
+                : "YOUR OWN PATH THROUGH THE PRACTICE"}
+            </p>
+            <h2>
+              {phase === "terminal"
+                ? "Welcome ashore."
+                : (current?.title ?? "Between places.")}
+            </h2>
+            <p>
+              {phase === "terminal"
+                ? "One touch. Bring the island to life."
+                : (current?.description ??
+                  "Follow the waterfront. See what catches your eye.")}
+            </p>
+            {phase === "terminal" && (
+              <button
+                className="primary"
+                onClick={() => engine.current?.activate()}
+              >
+                Activate the island <ArrowUpRight size={17} />
+              </button>
+            )}
+          </div>
+          {phase === "exploring" && current && (
+            <button className="near-action" onClick={() => onPlace(current.id)}>
+              <span className="live-dot" />
+              {current.id === "arrival" ? "How to explore" : current.label}
+              <ChevronRight size={17} />
+            </button>
+          )}
+          <div className="explore-hint">
+            Tap a path to walk <span>·</span> Drag to look around
+          </div>
+        </>
+      )}
+      {failed && (
+        <main className="fallback">
+          <p className="eyebrow">EMERALD BAY LAB / READING MODE</p>
+          <h1>
+            BUILD.
+            <br />
+            AUTOMATE.
+            <br />
+            <em>LEAD.</em>
+          </h1>
+          <p>Built by {profile.name}</p>
+          <p>{profile.titles.join(" · ")}</p>
+          <p className="note">
+            The 3D view is unavailable on this browser right now. The complete
+            portfolio is ready to explore below.
+          </p>
+          <button className="primary" onClick={() => open("works")}>
+            Explore the portfolio <ArrowUpRight size={17} />
+          </button>
+          <button
+            className="back-link"
+            onClick={() => {
+              setFailed(false);
+              setPhase("welcome");
+            }}
+          >
+            Try the 3D view again
+          </button>
+        </main>
+      )}
+      <aside className="world-tools" aria-label="World controls">
+        <button
+          aria-label="Island map"
+          title="Island map"
+          onClick={() => open("map")}
+        >
+          <Map size={19} />
+        </button>
+        <button
+          aria-label="Reset camera"
+          title="Reset camera"
+          onClick={() => engine.current?.resetCamera()}
+        >
+          <Compass size={19} />
+        </button>
+        <button
+          aria-label="Graphics settings"
+          title="Graphics settings"
+          onClick={() => open("settings")}
+        >
+          <Settings2 size={19} />
+          <span className="quality-indicator">{quality[0].toUpperCase()}</span>
+        </button>
+        <button
+          aria-label={sound ? "Mute ambient sound" : "Enable ambient sound"}
+          title={sound ? "Mute sound" : "Ambient sound"}
+          onClick={toggleSound}
+        >
+          {sound ? <Volume2 size={19} /> : <VolumeX size={19} />}
+        </button>
+        <button
+          aria-label="Controls and help"
+          title="Controls and help"
+          onClick={() => open("help")}
+        >
+          <HelpCircle size={19} />
+        </button>
+      </aside>
+      <footer className="world-footer">
+        <div className="footer-location">
+          <span className="live-dot" /> JAKARTA, INDONESIA{" "}
+          <span className="footer-coordinate">6.2° S / 106.8° E</span>
+        </div>
+        <nav
+          className="portfolio-nav"
+          id="portfolio-navigation"
+          aria-label="Portfolio quick access"
+        >
+          {navItems.map(({ id, name, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => open(id)}
+              aria-current={panel === id ? "page" : undefined}
+            >
+              <Icon size={17} />
+              <span>{name}</span>
+            </button>
+          ))}
+        </nav>
+        <div className="footer-note">
+          {phase === "welcome"
+            ? "DESIGNED TO BE DISCOVERED"
+            : `${visited.length} / 5 PLACES DISCOVERED`}
+          <span>EST. IN CURIOSITY</span>
+        </div>
+      </footer>
+      <dialog
+        ref={dialog}
+        className={`content-dialog ${panel === "map" ? "map-dialog" : ""}`}
+        aria-labelledby="panel-title"
+        onCancel={(e) => {
+          e.preventDefault();
+          close();
+        }}
+        onClick={(e) => {
+          if (e.target === dialog.current) close();
+        }}
+      >
+        {panel && (
+          <div className="dialog-sheet">
+            <header className="panel-header">
+              <div>
+                <p className="eyebrow">
+                  EMERALD BAY LAB / {panel.toUpperCase()}
+                </p>
+                <h2 id="panel-title">{panelTitles[panel]}</h2>
+              </div>
+              <button
+                className="close-panel"
+                autoFocus
+                aria-label="Close panel"
+                onClick={close}
+              >
+                <X size={23} />
+              </button>
+            </header>
+            <div className="panel-content">
+              <Content
+                key={panel}
+                panel={panel}
+                onPanel={open}
+                onTravel={travel}
+                quality={quality}
+                onQuality={chooseQuality}
+                visited={visited}
+                reduced={reduced}
+                onReduced={chooseMotion}
+                initialProject={
+                  location.pathname.startsWith("/projects/")
+                    ? location.pathname.split("/")[2]
+                    : undefined
+                }
+                onReplay={() => {
+                  close();
+                  engine.current?.start();
+                }}
+              />
+            </div>
+            <footer className="panel-footer">
+              <span>BUILD · AUTOMATE · LEAD</span>
+              <button onClick={close}>
+                Back to the island <RotateCcw size={13} />
+              </button>
+            </footer>
+          </div>
+        )}
+      </dialog>
+    </div>
   );
 }

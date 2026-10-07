@@ -1,7 +1,7 @@
 {
   "name": "eko-prasetyo-portfolio",
   "private": true,
-  "version": "2.1.0",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "format": "prettier --write src vite.config.ts",
     "check:content": "node scripts/check-content.cjs",
+    "test:v3": "node scripts/test-v3.cjs",
     "build:hero": "node scripts/build-hero-geometry.mjs"
   },
   "dependencies": {

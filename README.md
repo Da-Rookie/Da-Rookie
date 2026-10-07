@@ -1,3 +1,27 @@
+# Portfolio V3 — Emerald Bay Lab
+
+**BUILD · AUTOMATE · LEAD**
+
+Full-Stack Developer · AI Engineer · Project Manager
+
+This branch introduces Eko Prasetyo Pratomo’s explorable Three.js island portfolio. Delivery branch: `v3`. Production `main` is not merged by this change.
+
+- [Locked product requirements](docs/v3/PRD.md)
+- [Implementation and architecture](docs/v3/IMPLEMENTATION.md)
+- [Verification and remaining device checks](docs/v3/QA.md)
+
+```sh
+npm ci
+npm run check:content
+npm run test:v3
+npm run build
+npm run dev
+```
+
+Node 22.13+ (or Node 24) recommended by the installed Vite toolchain. The application uses local assets and needs no API credentials.
+
+---
+
 <!-- ============================= --><!-- HERO --><!-- ============================= -->
 <div align="center">
   <!-- <img src="img/Banner.png" alt="Eko Prasetyo Banner" width="100%" /> -->

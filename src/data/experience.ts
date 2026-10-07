@@ -14,15 +14,15 @@ export const experiences: Experience[] = [
   {
     id: "pertamedika-ai",
     position: "AI Engineer",
-    company: "PT Pertamedika",
+    company: "PT Pertamina Bina Medika IHC",
     employmentType: undefined,
     startDate: "Aug 2026",
     endDate: undefined,
     location: "",
     workMode: "On-site",
     description: [
-      "Building the Daycare Module as part of the internal system.",
-      "Integrating AI Automation into the Daycare system, including automation for child information workflows.",
+      "Building the Daycare Module as part of the Laravel-based internal system.",
+      "Integrating LLM-based agents and n8n workflows into the Daycare system to support child information automation.",
       "Integrating parent communication through WhatsApp and automating the delivery of daycare child updates and information to parents.",
       "Reducing manual communication processes by connecting application modules with automation workflows.",
     ],
