@@ -31,6 +31,7 @@ interface Options {
   onVisit: (id: PlaceId) => void;
   onError: () => void;
   onReady: () => void;
+  onInteract?: (id: PlaceId) => void;
 }
 export class EmeraldEngine {
   private scene = new THREE.Scene();
@@ -54,6 +55,8 @@ export class EmeraldEngine {
   private distance = 55;
   private route: [number, number][] = [];
   private keys = new Set<string>();
+  private joystick = new THREE.Vector2();
+  private virtualRun = false;
   private ray = new THREE.Raycaster();
   private pointer = new THREE.Vector2();
   private pointers = new Map<number, { x: number; y: number }>();
@@ -80,7 +83,7 @@ export class EmeraldEngine {
     this.renderer.shadowMap.enabled = !!presets[options.quality].shadow;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 0.9;
+    this.renderer.toneMappingExposure = 1.08;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.domElement.setAttribute(
       "aria-label",
@@ -89,8 +92,8 @@ export class EmeraldEngine {
     this.renderer.domElement.setAttribute("role", "img");
     this.renderer.domElement.tabIndex = 0;
     this.host.prepend(this.renderer.domElement);
-    this.scene.background = new THREE.Color("#97b4b6");
-    this.scene.fog = new THREE.FogExp2("#93b3b5", 0.0038);
+    this.scene.background = new THREE.Color("#c6edf1");
+    this.scene.fog = new THREE.FogExp2("#c9e9e6", 0.0027);
     this.env = createEnvironment(this.scene, this.renderer, options.quality);
     if (presets[options.quality].bloom) {
       this.composer = new EffectComposer(this.renderer);
@@ -194,8 +197,8 @@ export class EmeraldEngine {
     this.env.character.position.set(-15, 1.08, 17);
     this.env.boat.position.set(-11, 0.25, 22);
     this.env.boat.rotation.y = 0.2;
-    this.distance = 17;
-    this.elevation = 0.58;
+    this.distance = 10;
+    this.elevation = 0.52;
     this.azimuth = 0.05;
     this.target.copy(this.env.character.position);
     this.setPhase(this.activated ? "exploring" : "terminal");
@@ -208,11 +211,25 @@ export class EmeraldEngine {
   setPaused(value: boolean) {
     this.paused = value;
     this.keys.clear();
+    this.joystick?.set(0, 0);
+    this.virtualRun = false;
     this.pointers.clear();
     this.pinch = 0;
     this.clock.getDelta();
     if (!this.stopped && !document.hidden && !this.frame)
       this.frame = requestAnimationFrame(this.tick);
+  }
+  setJoystick(x: number, forward: number) {
+    if (this.paused || this.phase === "welcome" || this.phase === "arriving") return;
+    this.joystick.set(THREE.MathUtils.clamp(x, -1, 1), THREE.MathUtils.clamp(forward, -1, 1));
+    this.route = [];
+  }
+  setVirtualRun(value: boolean) {
+    this.virtualRun = value && !this.paused;
+  }
+  interact() {
+    if (this.phase === "terminal") { this.activate(); return; }
+    if (this.phase === "exploring" && this.near) this.options.onInteract?.(this.near);
   }
   resetCamera() {
     if (this.phase === "welcome") {
@@ -221,8 +238,8 @@ export class EmeraldEngine {
       this.elevation = 0.68;
       this.azimuth = 0.23;
     } else {
-      this.distance = 19;
-      this.elevation = 0.7;
+      this.distance = 10;
+      this.elevation = 0.58;
       this.azimuth = 0.12;
     }
   }
@@ -233,7 +250,7 @@ export class EmeraldEngine {
     const p = nodes[place.node];
     this.env.character.position.set(p[0], 1.08, p[1] + 1.7);
     this.route = [];
-    this.distance = 18;
+    this.distance = 10;
     this.target.copy(this.env.character.position);
     this.options.onVisit(id);
   }
@@ -246,6 +263,8 @@ export class EmeraldEngine {
         e.target.closest('button,a,input,select,textarea,[role="dialog"]'))
     )
       return;
+    if (e.key.toLowerCase() === "e" && !e.repeat) { e.preventDefault(); this.interact(); return; }
+    if (e.key.toLowerCase() === "shift") { this.keys.add("shift"); return; }
     if (
       [
         "w",
@@ -371,6 +390,13 @@ export class EmeraldEngine {
   };
   private animate(dt: number) {
     const { env, time } = this;
+    // Cinematic sunset is transient. Exploration always returns to bright tropical daylight.
+    if (env.sunlight) {
+      const golden = this.phase === "arriving";
+      env.sunlight.color.set(golden ? "#ffbc73" : "#fff6dc");
+      env.sunlight.intensity = golden ? 3.2 : 3.75;
+      if (env.sky) env.sky.material.uniforms.sunPosition.value.set(golden ? -0.85 : -0.4, golden ? 0.2 : 0.93, -0.7);
+    }
     if (env.water instanceof Water) {
       env.water.material.uniforms.time.value =
         time * (this.options.reducedMotion ? 0.1 : 0.35);
@@ -423,14 +449,17 @@ export class EmeraldEngine {
       if (this.keys.has("s") || this.keys.has("arrowdown")) forward = -1;
       if (this.keys.has("d") || this.keys.has("arrowright")) right = 1;
       if (this.keys.has("a") || this.keys.has("arrowleft")) right = -1;
+      if (!forward && !right) { forward = this.joystick.y; right = this.joystick.x; }
       let dx = 0,
         dz = 0;
       if (forward || right) {
         dx = -Math.sin(this.azimuth) * forward + Math.cos(this.azimuth) * right;
         dz = -Math.cos(this.azimuth) * forward - Math.sin(this.azimuth) * right;
         const l = Math.hypot(dx, dz);
-        dx = (dx / l) * dt * 4.8;
-        dz = (dz / l) * dt * 4.8;
+        const intensity = Math.min(1, l);
+        const speed = this.keys.has("shift") || this.virtualRun ? 6.25 : 3.35;
+        dx = (dx / l) * dt * speed * intensity;
+        dz = (dz / l) * dt * speed * intensity;
       } else if (this.route.length) {
         const [x, z] = this.route[0],
           len = Math.hypot(x - p.x, z - p.z);
@@ -462,7 +491,8 @@ export class EmeraldEngine {
           env.character.rotation.y += delta * Math.min(1, dt * 12);
         }
       }
-      const swing = moving ? Math.sin(time * 11) * 0.45 : 0;
+      const cadence = this.keys.has("shift") || this.virtualRun ? 15 : 10;
+      const swing = moving ? Math.sin(time * cadence) * 0.42 : 0;
       env.limbs.forEach(
         (l, i) => (l.rotation.x = swing * (i === 0 || i === 3 ? 1 : -1)),
       );
@@ -540,6 +570,8 @@ export class EmeraldEngine {
   dispose() {
     this.stop();
     this.abort.abort();
+    this.keys.clear();
+    this.joystick?.set(0, 0);
     this.observer.disconnect();
     const textures = new Set<THREE.Texture>(),
       geometries = new Set<THREE.BufferGeometry>(),

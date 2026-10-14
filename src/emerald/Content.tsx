@@ -15,13 +15,15 @@ import {
   BriefcaseBusiness,
 } from "lucide-react";
 import { profile } from "../data/profile";
-import { experiences } from "../data/experience";
-import { projects } from "../data/projects";
-import { achievements } from "../data/achievements";
-import { certifications } from "../data/certifications";
-import { publications } from "../data/publications";
-import { education } from "../data/education";
-import { skillGroups } from "../data/skills";
+import { portfolioRegistry } from "../data/portfolioRegistry";
+const {experiences,projects,achievements,certifications,publications,education,skillGroups}=portfolioRegistry;
+
+
+
+
+
+
+
 import {
   places,
   nodes,
@@ -33,7 +35,7 @@ import {
 export const panelTitles: Record<PanelId, string> = {
   works: "Inside the project lab",
   about: "The person behind the practice",
-  experience: "Eight chapters. One evolving practice.",
+  experience: experiences.length + " chapters. One evolving practice.",
   recognition: "A trail of evidence",
   contact: "Let’s make something meaningful.",
   map: "Find your own way",
@@ -660,10 +662,10 @@ function Help({ onReplay }: { onReplay: () => void }) {
         <section>
           <Eyebrow>DESKTOP</Eyebrow>
           <p>
-            <kbd>Click</kbd> the path to walk
+            <kbd>W A S D</kbd> controls Emm directly
           </p>
           <p>
-            <kbd>W A S D</kbd> or arrow keys to move
+            <kbd>Shift</kbd> to run · <kbd>E</kbd> to interact
           </p>
           <p>
             <kbd>Drag</kbd> to orbit the camera
@@ -675,7 +677,7 @@ function Help({ onReplay }: { onReplay: () => void }) {
         <section>
           <Eyebrow>TOUCH</Eyebrow>
           <p>
-            <kbd>Tap</kbd> the path to walk
+            <kbd>Joystick</kbd> to move Emm
           </p>
           <p>
             <kbd>Swipe</kbd> to orbit
@@ -684,7 +686,7 @@ function Help({ onReplay }: { onReplay: () => void }) {
             <kbd>Pinch</kbd> to zoom
           </p>
           <p>
-            <kbd>Tap a marker</kbd> to explore a story
+            <kbd>INTERACT</kbd> button near exhibits · hold RUN to sprint
           </p>
         </section>
       </div>

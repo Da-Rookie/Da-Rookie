@@ -11,6 +11,7 @@ import {
   isWalkable,
 } from "./topology";
 import { surface, waterNormal, labelTexture, random } from "./materials";
+import { installTropicalArt } from "./tropicalPolish";
 export interface Environment {
   root: THREE.Group;
   water: Water | THREE.Mesh;
@@ -21,6 +22,8 @@ export interface Environment {
   lights: THREE.MeshStandardMaterial[];
   animated: THREE.Object3D[];
   reflectionTargets: THREE.WebGLRenderTarget[];
+  sky: Sky;
+  sunlight: THREE.DirectionalLight;
 }
 export function createEnvironment(
   scene: THREE.Scene,
@@ -51,7 +54,7 @@ export function createEnvironment(
   const lawn = new THREE.MeshStandardMaterial({
     map: surface(preset.texture, "grass"),
     roughness: 1,
-    color: "#819d63",
+    color: "#75aa69",
     bumpScale: 0.1,
   });
   lawn.bumpMap = lawn.map;
@@ -73,7 +76,7 @@ export function createEnvironment(
     roughness: 0.29,
   });
   const glass = new THREE.MeshPhysicalMaterial({
-    color: "#75b5ae",
+    color: "#b6e7dc",
     metalness: 0.12,
     roughness: 0.13,
     transparent: true,
@@ -219,8 +222,8 @@ export function createEnvironment(
       textureHeight: preset.reflection,
       waterNormals: waterNormal(),
       sunDirection: new THREE.Vector3(-0.4, 0.5, -0.8),
-      sunColor: 0xffd6af,
-      waterColor: 0x087c7a,
+      sunColor: 0xfffae6,
+      waterColor: 0x16a2a9,
       distortionScale: 2.8,
       fog: true,
     });
@@ -232,7 +235,7 @@ export function createEnvironment(
     water = new THREE.Mesh(
       new THREE.PlaneGeometry(1500, 1500),
       new THREE.MeshStandardMaterial({
-        color: "#148c87",
+        color: "#26a4a1",
         roughness: 0.26,
         metalness: 0.55,
         normalMap: waterNormal(),
@@ -249,14 +252,14 @@ export function createEnvironment(
   const sky = new Sky();
   sky.scale.setScalar(1400);
   const su = sky.material.uniforms;
-  su.turbidity.value = 8;
-  su.rayleigh.value = 1.7;
+  su.turbidity.value = 3.5;
+  su.rayleigh.value = 1.25;
   su.mieCoefficient.value = 0.004;
   su.mieDirectionalG.value = 0.88;
   const sun = new THREE.Vector3().setFromSphericalCoords(
     1,
-    THREE.MathUtils.degToRad(87),
-    THREE.MathUtils.degToRad(245),
+    THREE.MathUtils.degToRad(45),
+    THREE.MathUtils.degToRad(225),
   );
   su.sunPosition.value.copy(sun);
   root.add(sky);
@@ -268,10 +271,10 @@ export function createEnvironment(
   scene.environment = envTarget.texture;
   reflectionTargets.push(envTarget);
   pmrem.dispose();
-  const hemi = new THREE.HemisphereLight("#b4dcdd", "#314c42", 2);
+  const hemi = new THREE.HemisphereLight("#d8f5ec", "#436553", 2.35);
   root.add(hemi);
-  const sunlight = new THREE.DirectionalLight("#ffdcad", 3.5);
-  sunlight.position.set(-36, 47, -26);
+  const sunlight = new THREE.DirectionalLight("#fff6dc", 3.75);
+  sunlight.position.set(-36, 86, -35);
   sunlight.castShadow = !!preset.shadow;
   sunlight.shadow.mapSize.set(preset.shadow || 512, preset.shadow || 512);
   Object.assign(sunlight.shadow.camera, {
@@ -729,6 +732,8 @@ export function createEnvironment(
   character.traverse((o) => {
     if (o instanceof THREE.Mesh) o.castShadow = true;
   });
+  // World art layer is deterministic and tier-aware; it stays separate from the walkability contract.
+  installTropicalArt(root, quality);
   // Distant uninhabited coast silhouettes frame the open sea.
   const mountainMat = new THREE.MeshStandardMaterial({
     color: "#587a79",
@@ -752,5 +757,7 @@ export function createEnvironment(
     lights,
     animated,
     reflectionTargets,
+    sky,
+    sunlight,
   };
 }

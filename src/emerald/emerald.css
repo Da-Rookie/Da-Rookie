@@ -2025,3 +2025,43 @@ kbd {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Emerald Bay Lab: tactile controls, safe-area-aware mobile HUD. */
+.game-controls { pointer-events:none; position:absolute; inset:auto 36px 112px 36px; z-index:5; display:flex; justify-content:space-between; align-items:end; }
+.game-controls button,.game-controls .analog-stick {pointer-events:auto; touch-action:none; user-select:none; -webkit-user-select:none}
+.analog-unit,.action-unit {display:flex; align-items:center;gap:12px}
+.analog-unit {flex-direction:column;color:#effff7;font-size:10px;letter-spacing:.17em;font-weight:700}
+.analog-stick {position:relative;width:116px;height:116px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle,#163c3dbf 0%,#0e343c6a 60%,#3a7b6d35 100%);
+  border:1px solid #ffffff67;box-shadow:0 6px 35px #00262740,inset 0 0 32px #a8e8cd24;backdrop-filter:blur(10px);}
+.analog-ring{width:80px;height:80px;border:1px dashed #a5f7d96e;border-radius:50%;pointer-events:none}
+.analog-knob{position:absolute;left:calc(50% - 24px);top:calc(50% - 24px);width:48px;height:48px;border-radius:50%;
+  border:1px solid #f4fff8a8; background:linear-gradient(135deg,#8be4cdbb,#2e8673d8);box-shadow:0 6px 18px #063834a3;pointer-events:none}
+.action-unit {gap:10px; flex-direction:column; align-items:end;}
+.action-unit button{display:flex;align-items:center;justify-content:center;gap:8px;
+  min-width:82px;min-height:52px;padding:13px;border:1px solid #e4ffec6f;
+  background:#113e3cce;color:#fff; border-radius:18px;font-size:10px;font-weight:800;letter-spacing:.08em;backdrop-filter:blur(12px);
+  box-shadow:0 7px 22px #0326285c;}
+.action-unit .action-interact{min-width:116px;background:linear-gradient(135deg,#276e5ce0,#143f40e8);}
+.action-unit button:active {transform:scale(.95)}
+.action-unit button:disabled{opacity:.6}
+.analog-unit,.action-unit {display:none}
+@media (hover:none), (pointer:coarse) {
+ .analog-unit,.action-unit {display:flex}
+ .game-controls {left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));
+  bottom:max(110px,calc(env(safe-area-inset-bottom) + 91px))}
+ .explore-hint {display:none}
+}
+@media(max-width:680px){
+ .analog-stick{width:104px;height:104px}
+ .action-unit button{min-height:48px;border-radius:14px}
+ .action-unit .action-interact{min-width:104px}
+}
+@media(max-height:550px){
+ .game-controls{bottom:max(65px,calc(env(safe-area-inset-bottom) + 53px))}
+ .analog-stick{width:90px;height:90px}
+}
+.phase-welcome .world-vignette {
+ background:linear-gradient(90deg,#082a2cd9 0%,#124047a1 33%,#082a2c0e 80%),
+ linear-gradient(0deg,#103d34a1,transparent 32%,transparent 72%,#08332d29);
+}

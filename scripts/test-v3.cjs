@@ -38,7 +38,7 @@ function loadTS(file, globals = {}) {
 }
 const t = loadTS("src/emerald/topology.ts");
 const plain = (v) => JSON.parse(JSON.stringify(v));
-assert.equal(t.places.length, 5);
+assert.equal(t.places.length, 8);
 assert.equal(t.isWalkable(0, 0), false, "Central bay must not be walkable");
 assert.equal(t.isWalkable(90, 90), false, "Open sea must not be walkable");
 for (const [x, z] of [

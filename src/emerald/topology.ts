@@ -1,4 +1,4 @@
-export type PlaceId = "arrival" | "lab" | "terrace" | "gallery" | "contact";
+export type PlaceId = "arrival" | "plaza" | "lab" | "automate" | "lead" | "terrace" | "gallery" | "contact";
 export type PanelId =
   | "works"
   | "about"
@@ -57,9 +57,14 @@ export const places: {
     color: "#b7f2d3",
   },
   {
+    id: "plaza",
+    title: "Bay Plaza", label: "Explore the island",
+    description: "Every direction is a new chapter.", panel: "help", node: 14, color: "#e5dfba",
+  },
+  {
     id: "lab",
-    title: "The project lab",
-    label: "Selected work",
+    title: "BUILD — Engineering Studio",
+    label: "BUILD Studio",
     description: "Ideas made tangible. Systems made useful.",
     panel: "works",
     node: 3,
@@ -67,16 +72,26 @@ export const places: {
   },
   {
     id: "terrace",
-    title: "The working terrace",
-    label: "Meet Eko",
+    title: "Origins — Career Terrace",
+    label: "Origins",
     description: "The person, the practice, the professional journey.",
     panel: "about",
     node: 6,
     color: "#c6d8a0",
   },
   {
+    id: "automate",
+    title: "AUTOMATE — Intelligent Systems", label: "AUTOMATE Lab",
+    description: "Intelligent systems, practical impact.", panel: "works", node: 1, color: "#7ddbcf",
+  },
+  {
+    id: "lead",
+    title: "LEAD — Strategy & Command Center", label: "LEAD Center",
+    description: "From decisions to delivery.", panel: "experience", node: 11, color: "#ead4a7",
+  },
+  {
     id: "gallery",
-    title: "The recognition gallery",
+    title: "Recognition Gallery",
     label: "A trail of evidence",
     description: "Work recognized. Knowledge shared.",
     panel: "recognition",
@@ -85,7 +100,7 @@ export const places: {
   },
   {
     id: "contact",
-    title: "The conversation deck",
+    title: "Horizon — Contact Deck",
     label: "What comes next",
     description: "Good work begins with a conversation.",
     panel: "contact",

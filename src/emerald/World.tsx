@@ -29,8 +29,8 @@ export function World({
   const snapshot = useRef<WorldSnapshot | null>(null);
   const host = useRef<HTMLDivElement>(null),
     [loading, setLoading] = useState(true);
-  const callbacks = useRef({ onPhase, onNear, onVisit, onError, onReady });
-  callbacks.current = { onPhase, onNear, onVisit, onError, onReady };
+  const callbacks = useRef({ onPhase, onNear, onVisit, onPlace, onError, onReady });
+  callbacks.current = { onPhase, onNear, onVisit, onPlace, onError, onReady };
   const pauseRef = useRef(paused);
   pauseRef.current = paused;
   useEffect(() => {
@@ -52,6 +52,7 @@ export function World({
             onNear: (id) => callbacks.current.onNear(id),
             onVisit: (id) => callbacks.current.onVisit(id),
             onError: () => callbacks.current.onError(),
+            onInteract: (id) => callbacks.current.onPlace(id),
             onReady: () => {
               setLoading(false);
               callbacks.current.onReady(true);

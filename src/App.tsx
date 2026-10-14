@@ -18,6 +18,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { World } from "./emerald/World";
+import { GameControls } from "./emerald/GameControls";
 import { Content, panelTitles } from "./emerald/Content";
 import {
   places,
@@ -346,8 +347,10 @@ export default function App() {
             </button>
           )}
           <div className="explore-hint">
-            Tap a path to walk <span>·</span> Drag to look around
+            WASD / Arrows to move <span>·</span> Shift to run <span>·</span> E to interact <span>·</span> Drag to look around
           </div>
+          <GameControls engineRef={engine} active={!panel && ready} available={!!near || phase === "terminal"}
+            onInteract={() => engine.current?.interact()} />
         </>
       )}
       {failed && (
@@ -442,7 +445,7 @@ export default function App() {
         <div className="footer-note">
           {phase === "welcome"
             ? "DESIGNED TO BE DISCOVERED"
-            : `${visited.length} / 5 PLACES DISCOVERED`}
+            : `${visited.length} / ${places.length} PLACES DISCOVERED`}
           <span>EST. IN CURIOSITY</span>
         </div>
       </footer>
