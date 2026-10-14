@@ -199,6 +199,18 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
    }
    tube(g,offset===0?frame:wall,pts,offset===0?.12:.23,42);
   }
+  // Continuous curved glass canopy under its real structural arch.
+  const roofCoordinates:number[]=[],roofIndices:number[]=[];
+  for(let i=0;i<=nRoof;i++){
+   const u=i/nRoof*Math.PI,x=-w*Math.cos(u),y=2+tall*.55*Math.sin(u);
+   roofCoordinates.push(x,y,-d+.26,x,y,d-.26);
+   if(i<nRoof){const n=i*2;roofIndices.push(n,n+1,n+2,n+1,n+3,n+2);}
+  }
+  const roofGeometry=new THREE.BufferGeometry();
+  roofGeometry.setAttribute("position",new THREE.Float32BufferAttribute(roofCoordinates,3));
+  roofGeometry.setIndex(roofIndices);
+  roofGeometry.computeVertexNormals();
+  const canopy=mesh(roofGeometry,glass,g);canopy.castShadow=false;
   // Semi-open structural ribs, roof fins, and floor-to-ceiling glass.
   for(let i=0;i<=12;i++){
    const v=i/12,xx=-w+v*width,yy=2+tall*.55*Math.sqrt(Math.max(0,1-(xx/w)**2));
