@@ -34,6 +34,7 @@ interface Options {
   onError: () => void;
   onReady: () => void;
   onInteract?: (id: PlaceId) => void;
+  onMap?: () => void;
 }
 export class EmeraldEngine {
   private scene = new THREE.Scene();
@@ -134,12 +135,14 @@ export class EmeraldEngine {
     );
     window.addEventListener("keydown", this.keyDown, { signal });
     window.addEventListener("keyup", this.keyUp, { signal });
-    window.addEventListener("blur", () => this.keys.clear(), { signal });
+    window.addEventListener("blur", () => {this.keys.clear();this.joystick.set(0,0);this.virtualRun=false;}, { signal });
     document.addEventListener(
       "visibilitychange",
       () => {
         this.clock.getDelta();
         this.keys.clear();
+        this.joystick.set(0,0);
+        this.virtualRun=false;
         if (!document.hidden && !this.stopped && !this.frame)
           this.frame = requestAnimationFrame(this.tick);
       },
@@ -270,6 +273,8 @@ export class EmeraldEngine {
     )
       return;
     if (e.key.toLowerCase() === "e" && !e.repeat) { e.preventDefault(); this.interact(); return; }
+    if (e.key.toLowerCase() === "m" && !e.repeat) {e.preventDefault();this.options.onMap?.();return;}
+    if (e.key.toLowerCase() === "r" && !e.repeat) {e.preventDefault();this.resetCamera();return;}
     if (e.key.toLowerCase() === "shift") { this.keys.add("shift"); return; }
     if (
       [
@@ -439,7 +444,7 @@ export class EmeraldEngine {
         dz = -Math.cos(this.azimuth) * forward - Math.sin(this.azimuth) * right;
         const l = Math.hypot(dx, dz);
         const intensity = Math.min(1, l);
-        const speed = this.keys.has("shift") || this.virtualRun ? 6.25 : 3.35;
+        const speed = this.keys.has("shift") || this.virtualRun ? 4.4 : 2.6;
         dx = (dx / l) * dt * speed * intensity;
         dz = (dz / l) * dt * speed * intensity;
       } else if (this.route.length) {

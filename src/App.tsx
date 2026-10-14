@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { World } from "./emerald/World";
 import { GameControls } from "./emerald/GameControls";
+import { createCoastalAmbience } from "./emerald/ambience";
 import { Content, panelTitles } from "./emerald/Content";
 import {
   places,
@@ -69,7 +70,8 @@ export default function App() {
   const [phase, setPhase] = useState<Phase>("welcome"),
     [panel, setPanel] = useState<PanelId | null>(routePanel),
     [near, setNear] = useState<PlaceId | null>(null),
-    [visited, setVisited] = useState<PlaceId[]>([]);
+    [visited, setVisited] = useState<PlaceId[]>([]),
+    [sceneFocus, setSceneFocus] = useState<PlaceId | null>(null);
   const [quality, setQuality] = useState<Quality>(() => {
     const q = readPreference("emerald-quality", "medium");
     return ["low", "medium", "high"].includes(q) ? (q as Quality) : "medium";
@@ -93,7 +95,7 @@ export default function App() {
     dialog = useRef<HTMLDialogElement>(null),
     focusReturn = useRef<HTMLElement | null>(null),
     audio = useRef<AudioContext | null>(null),
-    oscillators = useRef<OscillatorNode[]>([]);
+    ambience = useRef<ReturnType<typeof createCoastalAmbience> | null>(null);
   const visit = useCallback(
     (id: PlaceId) => setVisited((v) => (v.includes(id) ? v : [...v, id])),
     [],
@@ -127,7 +129,8 @@ export default function App() {
   useEffect(() => {
     document.title = "Emerald Bay Lab — Eko Prasetyo Pratomo";
     return () => {
-      audio.current?.close();
+      ambience.current?.dispose();
+      void audio.current?.close();
     };
   }, []);
   useEffect(() => {
@@ -154,6 +157,7 @@ export default function App() {
     }
     const p = places.find((p) => p.id === id)!;
     visit(id);
+    setSceneFocus(id);
     open(p.panel);
   }
   function travel(id: PlaceId) {
@@ -176,23 +180,9 @@ export default function App() {
     }
     try {
       if (!audio.current) {
-        const ctx = new AudioContext();
-        audio.current = ctx;
-        const master = ctx.createGain();
-        master.gain.value = 0.025;
-        master.connect(ctx.destination);
-        [130.81, 196, 261.63].forEach((freq, i) => {
-          const o = ctx.createOscillator(),
-            g = ctx.createGain();
-          o.type = "sine";
-          o.frequency.value = freq;
-          o.detune.value = i * 3;
-          g.gain.value = 0.35;
-          o.connect(g);
-          g.connect(master);
-          o.start();
-          oscillators.current.push(o);
-        });
+        const ctx=new AudioContext();
+        audio.current=ctx;
+        ambience.current=createCoastalAmbience(ctx);
       }
       await audio.current.resume();
       setSound(true);
@@ -221,6 +211,7 @@ export default function App() {
           onNear={setNear}
           onVisit={visit}
           onPlace={onPlace}
+          onMap={() => open("map")}
           onError={() => setFailed(true)}
           onReady={setReady}
           engineRef={engine}
@@ -434,7 +425,7 @@ export default function App() {
           {navItems.map(({ id, name, icon: Icon }) => (
             <button
               key={id}
-              onClick={() => open(id)}
+              onClick={() => { setSceneFocus(null); open(id); }}
               aria-current={panel === id ? "page" : undefined}
             >
               <Icon size={17} />
@@ -481,7 +472,7 @@ export default function App() {
             </header>
             <div className="panel-content">
               <Content
-                key={panel}
+                key={panel + "-" + (sceneFocus ?? "quick")}
                 panel={panel}
                 onPanel={open}
                 onTravel={travel}
@@ -493,6 +484,8 @@ export default function App() {
                 initialProject={
                   location.pathname.startsWith("/projects/")
                     ? location.pathname.split("/")[2]
+                    : sceneFocus === "automate" ? "daycare"
+                    : sceneFocus === "lab" ? "klik-kelontong"
                     : undefined
                 }
                 onReplay={() => {

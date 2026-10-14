@@ -10,6 +10,7 @@ interface Props {
   onNear: (id: PlaceId | null) => void;
   onVisit: (id: PlaceId) => void;
   onPlace: (id: PlaceId) => void;
+  onMap: () => void;
   onError: () => void;
   onReady: (ready: boolean) => void;
   engineRef: React.MutableRefObject<EmeraldEngine | null>;
@@ -22,6 +23,7 @@ export function World({
   onNear,
   onVisit,
   onPlace,
+  onMap,
   onError,
   onReady,
   engineRef,
@@ -29,8 +31,8 @@ export function World({
   const snapshot = useRef<WorldSnapshot | null>(null);
   const host = useRef<HTMLDivElement>(null),
     [loading, setLoading] = useState(true);
-  const callbacks = useRef({ onPhase, onNear, onVisit, onPlace, onError, onReady });
-  callbacks.current = { onPhase, onNear, onVisit, onPlace, onError, onReady };
+  const callbacks = useRef({ onPhase, onNear, onVisit, onPlace, onMap, onError, onReady });
+  callbacks.current = { onPhase, onNear, onVisit, onPlace, onMap, onError, onReady };
   const pauseRef = useRef(paused);
   pauseRef.current = paused;
   useEffect(() => {
@@ -53,6 +55,7 @@ export function World({
             onVisit: (id) => callbacks.current.onVisit(id),
             onError: () => callbacks.current.onError(),
             onInteract: (id) => callbacks.current.onPlace(id),
+            onMap: () => callbacks.current.onMap(),
             onReady: () => {
               setLoading(false);
               callbacks.current.onReady(true);
