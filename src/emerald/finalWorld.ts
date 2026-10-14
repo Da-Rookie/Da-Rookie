@@ -9,13 +9,13 @@ export interface Environment {
  character:THREE.Group;limbs:THREE.Group[];boat:THREE.Group;
  lights:THREE.MeshStandardMaterial[];animated:THREE.Object3D[];
  reflectionTargets:THREE.WebGLRenderTarget[];sky:Sky;sunlight:THREE.DirectionalLight;
- cameraColliders:THREE.Object3D[];
+ cameraColliders:THREE.Object3D[];playerColliders:THREE.Object3D[];
 }
 export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer,quality:Quality):Environment{
  const root=new THREE.Group(); scene.add(root);root.name="Emerald Bay — immersive playable archipelago";
  const budget=presets[quality],rng=random();
  const reflectionTargets:THREE.WebGLRenderTarget[]=[],lights:THREE.MeshStandardMaterial[]=[],
- animated:THREE.Object3D[]=[],cameraColliders:THREE.Object3D[]=[];
+ animated:THREE.Object3D[]=[],cameraColliders:THREE.Object3D[]=[],playerColliders:THREE.Object3D[]=[];
  const stone=new THREE.MeshStandardMaterial({color:0xd7d5c4,map:surface(budget.texture,"stone"),roughness:.92});
  const cliff=new THREE.MeshStandardMaterial({color:0x919f8b,roughness:1});
  const sand=new THREE.MeshStandardMaterial({color:0xe7d4b0,roughness:1});
@@ -158,7 +158,10 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
  // Open pavilion architecture. Every glazed wall has a true center cutout aligned with a path.
  function pavilion(node:number,width:number,depth:number,title:string,subtitle:string,kind:"build"|"automate"|"lead"|"recognition"|"origins"|"horizon"){
   const [x,z]=nodes[node],h=heights[node],g=new THREE.Group();
-  g.position.set(x,h+.1,z);root.add(g);g.name=title;
+  g.position.set(x,h+.1,z);
+  const approach=kind==="build"?nodes[5]:kind==="automate"?nodes[18]:kind==="lead"?nodes[19]:kind==="recognition"?nodes[11]:kind==="origins"?nodes[3]:nodes[13];
+  g.rotation.y=Math.atan2(approach[0]-x,approach[1]-z);
+  root.add(g);g.name=title;
   const w=width/2,d=depth/2;
   box(g,stone,0,-.16,0,width+.8,.32,depth+.8);
   const floor=box(g,timber,0,.06,0,width,.09,depth);
@@ -205,23 +208,31 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
    const sx=side*(w-.25);
    box(g,frame,sx,2.4,0,.17,4.5,depth);
    const pane=box(g,glass,sx,2.25,0,.06,4.3,depth-.35);pane.castShadow=false;
+   playerColliders.push(pane);cameraColliders.push(pane);
   }
   // Rear transparent facade; front has a true 3m clear entrance, not a decorative sign.
-  const rear=box(g,glass,0,2.25,-d+.17,width-.5,4.3,.06);rear.castShadow=false;
+  // Paired real front/rear passages support the main ring from either direction.
+  const rearOpening=(width-3.2)/2;
+  for(const side of [-1,1]){
+   const xx=side*(1.6+rearOpening/2);
+   const rear=box(g,glass,xx,2.25,-d+.16,rearOpening-.22,4.3,.07);
+   rear.castShadow=false;playerColliders.push(rear);cameraColliders.push(rear);
+  }
   const sideWidth=(width-3.2)/2;
   for(const side of [-1,1]){
    const xx=side*(1.6+sideWidth/2);
    const front=box(g,glass,xx,2.25,d-.16,sideWidth-.22,4.3,.07);
-   front.castShadow=false;
+   front.castShadow=false;playerColliders.push(front);cameraColliders.push(front);
    box(g,frame,side*1.6,2.27,d-.18,.13,4.4,.11);
   }
   box(g,frame,0,4.54,d-.19,3.3,.16,.2);
   const sign=billboard(g,title,subtitle,0,5.15,d+.21,Math.min(width-2,11));
   sign.castShadow=false;
   // A readable centerpiece + context-aware exhibits, no raw placeholder cubes.
-  const table=cylinder(g,stone,0,.96,-.3,2.2,.21,2.3,40);
-  cylinder(g,frame,0,.46,-.3,.74,.85,.84,24);
-  const artifact=mesh(kind==="recognition"?new THREE.TorusGeometry(.78,.17,10,32):new THREE.IcosahedronGeometry(.77,2),kind==="recognition"?gold:mint,g,0,2.08,-.3);
+  const table=cylinder(g,stone,0,.96,-3.1,1.65,.21,1.75,40);
+  cylinder(g,frame,0,.46,-3.1,.6,.85,.65,24);
+  const artifact=mesh(kind==="recognition"?new THREE.TorusGeometry(.78,.17,10,32):new THREE.IcosahedronGeometry(.77,2),kind==="recognition"?gold:mint,g,0,2.08,-3.1);
+  playerColliders.push(table);
   artifact.rotation.x=.24;animated.push(artifact);
   // Showcase alcoves on rear wall.
   for(let k=0;k<3;k++){
@@ -234,7 +245,7 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
    cylinder(g,stone,side*(w-1.1),.56,d-1,.52,1.05,.58,12);
    cylinder(g,grass,side*(w-1.1),1.23,d-1,.66,.65,.32,9);
   }
-  cameraColliders.push(rear);
+  // Camera and locomotion collide against authored structural glass, never foliage.
  }
  pavilion(6,20,15,"BUILD STUDIO","ENGINEERING & PRODUCTS","build");
  pavilion(10,19,15,"AUTOMATE LAB","INTELLIGENT WORKFLOWS","automate");
@@ -339,5 +350,5 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
  }
  character.position.set(...[nodes[0][0],heights[0],nodes[0][1]]);
  character.traverse(o=>{if(o instanceof THREE.Mesh)o.castShadow=true});
- return {root,water,beacons,character,limbs,boat,lights,animated,reflectionTargets,sky,sunlight,cameraColliders};
+ return {root,water,beacons,character,limbs,boat,lights,animated,reflectionTargets,sky,sunlight,cameraColliders,playerColliders};
 }

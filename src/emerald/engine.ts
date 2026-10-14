@@ -361,6 +361,17 @@ export class EmeraldEngine {
       16,
     );
   };
+  private canStep(nx:number,nz:number,x:number,z:number,y:number){
+    if(!isWalkable(nx,nz))return false;
+    const barriers=this.env.playerColliders;
+    if(!barriers?.length)return true;
+    const direction=new THREE.Vector3(nx-x,0,nz-z),travel=direction.length();
+    if(travel<1e-5)return true;
+    this.ray.set(new THREE.Vector3(x,y+1.08,z),direction.normalize());
+    this.ray.near=0;
+    this.ray.far=travel+.33;
+    return this.ray.intersectObjects(barriers,false).length===0;
+  }
   private tick = () => {
     this.frame = 0;
     if (this.stopped || document.hidden) return;
@@ -458,14 +469,14 @@ export class EmeraldEngine {
         }
       }
       if (dx || dz) {
-        if (isWalkable(p.x + dx, p.z + dz)) {
+        if (this.canStep(p.x + dx, p.z + dz,p.x,p.z,p.y)) {
           p.x += dx;
           p.z += dz;
           moving = true;
-        } else if (isWalkable(p.x + dx, p.z)) {
+        } else if (this.canStep(p.x + dx, p.z,p.x,p.z,p.y)) {
           p.x += dx;
           moving = true;
-        } else if (isWalkable(p.x, p.z + dz)) {
+        } else if (this.canStep(p.x, p.z + dz,p.x,p.z,p.y)) {
           p.z += dz;
           moving = true;
         } else this.route = [];
