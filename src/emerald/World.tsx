@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, LoaderCircle } from "lucide-react";
-import type { EmeraldEngine, Phase, WorldSnapshot } from "./engine";
+import type { EmeraldEngine, Phase, WorldSnapshot, RenderTelemetry } from "./engine";
 import { places, type Quality, type PlaceId } from "./topology";
 interface Props {
   quality: Quality;
@@ -30,7 +30,9 @@ export function World({
 }: Props) {
   const snapshot = useRef<WorldSnapshot | null>(null);
   const host = useRef<HTMLDivElement>(null),
-    [loading, setLoading] = useState(true);
+    [loading, setLoading] = useState(true),
+    [telemetry, setTelemetry] = useState<RenderTelemetry | null>(null);
+  const showTelemetry = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf");
   const callbacks = useRef({ onPhase, onNear, onVisit, onPlace, onMap, onError, onReady });
   callbacks.current = { onPhase, onNear, onVisit, onPlace, onMap, onError, onReady };
   const pauseRef = useRef(paused);
@@ -56,6 +58,7 @@ export function World({
             onError: () => callbacks.current.onError(),
             onInteract: (id) => callbacks.current.onPlace(id),
             onMap: () => callbacks.current.onMap(),
+            onMetrics: showTelemetry ? sample => setTelemetry(sample) : undefined,
             onReady: () => {
               setLoading(false);
               callbacks.current.onReady(true);
@@ -103,6 +106,13 @@ export function World({
           <i />
         </button>
       ))}
+      {showTelemetry && telemetry && (
+        <output className="perf-telemetry" aria-label="Live 3D performance counters">
+          <strong>{telemetry.fps} FPS</strong>
+          <span>{telemetry.drawCalls} draws · {Math.round(telemetry.triangles / 1000)}k triangles</span>
+          <small>{telemetry.quality.toUpperCase()} quality · live browser reading</small>
+        </output>
+      )}
       {loading && (
         <div className="world-loading" role="status">
           <LoaderCircle className="spin" size={22} />

@@ -143,6 +143,23 @@ for (const panel of [
   );
   assert(rendered[panel].length > 200);
 }
+// Spatial contract: every themed destination is traversable and sits on its actual deck height.
+for (const place of t.places) {
+  const [x, z] = t.nodes[place.node];
+  assert(t.isWalkable(x, z), place.id + ": destination must be traversable");
+  assert(Math.abs(t.groundHeight(x, z) - t.heights[place.node]) < 0.001, place.id + ": exhibit deck must match locomotion height");
+  assert(t.pathBetween(0, place.node).length >= 1, place.id + ": linked to Arrival Pier");
+}
+for (const [a, b] of t.edges) {
+  const x=t.nodes[a][0],z=t.nodes[a][1],endX=t.nodes[b][0],endZ=t.nodes[b][1];
+  const span=Math.hypot(endX-x,endZ-z);
+  const grade=Math.abs(t.heights[a]-t.heights[b])/Math.max(.1,span);
+  assert(grade<=.23, "Walkway exceeds acceptable pedestrian grade: "+a+"-"+b);
+  for(let j=0;j<=25;j++){
+    const k=j/25;
+    assert(t.isWalkable(x+(endX-x)*k,z+(endZ-z)*k), "Visible walkway route must have collision floor");
+  }
+}
 const { experiences } = loadTS("src/data/experience.ts");
 for (const e of experiences) {
   assert(rendered.experience.includes(e.position.replaceAll("&", "&amp;")));
@@ -290,6 +307,33 @@ function engineFixture() {
     ) < 0.2,
     "Locomotion reaches gallery",
   );
+}
+// Direct analogue movement, wall collision and semantic E / Interact events are regression-tested.
+{
+  const {e}=engineFixture();
+  e.joystick=new THREE.Vector2();
+  e.velocity=new THREE.Vector2();
+  e.ray=new THREE.Raycaster();
+  e.env.playerColliders=[];
+  e.phase="exploring";
+  e.activated=true;
+  e.env.character.position.set(t.nodes[0][0],t.heights[0],t.nodes[0][1]);
+  e.azimuth=0;
+  e.setJoystick(0,-1);
+  for(let i=0;i<140;i++){e.time+=1/60;e.animate(1/60);}
+  assert(e.env.character.position.z>t.nodes[0][1]+2,"Analogue control moves Emm directly along the walkable pier");
+  assert(t.isWalkable(e.env.character.position.x,e.env.character.position.z));
+  e.setJoystick(0,0);
+  const wall=new THREE.Mesh(new THREE.BoxGeometry(.2,2.5,3),new THREE.MeshBasicMaterial({side:THREE.DoubleSide}));
+  wall.position.set(2,1,-49);wall.updateMatrixWorld(true);
+  e.env.playerColliders=[wall];
+  assert.equal(e.canStep(3,-49,0,-49,t.heights[0]),false,"Capsule samples block glass and furniture");
+  assert.equal(e.canStep(.5,-49,0,-49,t.heights[0]),true,"Clear floor remains traversable");
+  e.near="gallery";
+  let interacted="";
+  e.options.onInteract=(id)=>interacted=id;
+  e.interact();
+  assert.equal(interacted,"gallery","E and Interact buttons open the nearby narrative");
 }
 console.log(
   "PASS: arrival/skip/activation; live walking simulation; reduced motion; quality state restoration; panel pause.",

@@ -62,7 +62,7 @@ export function GameControls({engineRef,active,available,onInteract}:Props) {
       <span>MOVE</span>
     </div>
     <div className="action-unit">
-      <button className="action-interact" disabled={!active} onClick={onInteract}
+      <button className="action-interact" disabled={!active || !available} onClick={onInteract}
         aria-label={available?"Interact with nearby exhibit":"Interact with island"}>
         <Hand size={20}/><span>INTERACT</span>
       </button>

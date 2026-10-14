@@ -671,11 +671,11 @@ function Help({ onReplay }: { onReplay: () => void }) {
             <kbd>Drag</kbd> to orbit the camera
           </p>
           <p>
-            <kbd>Scroll</kbd> to zoom
+            <kbd>Scroll</kbd> to zoom · <kbd>M</kbd> map · <kbd>R</kbd> reset camera
           </p>
         </section>
         <section>
-          <Eyebrow>TOUCH</Eyebrow>
+          <Eyebrow>TOUCH / MOBILE</Eyebrow>
           <p>
             <kbd>Joystick</kbd> to move Emm
           </p>
@@ -691,6 +691,8 @@ function Help({ onReplay }: { onReplay: () => void }) {
         </section>
       </div>
       <div className="prose-section">
+        <h4>GAMEPAD</h4>
+        <p>Left stick to move, right stick to orbit, A / Cross to interact, and right trigger to run. Controls are optional; all content is accessible without a controller.</p>
         <h4>Take the scenic route. Or go straight there.</h4>
         <p>
           The bottom navigation opens portfolio content immediately. The map

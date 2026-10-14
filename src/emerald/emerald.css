@@ -2119,3 +2119,13 @@ kbd {
  .phase-exploring .explore-heading p:not(.eyebrow){display:none}
  .near-action{bottom:70px;left:auto;right:12px;transform:none}
 }
+
+/* Diagnostics opt-in: append ?perf=1 to branch preview. Never visible to ordinary visitors. */
+.perf-telemetry{position:absolute;z-index:6;right:25px;top:105px;
+ display:flex;flex-direction:column;gap:3px;padding:10px 13px;border-radius:12px;
+ background:rgba(8,43,41,.82);border:1px solid rgba(210,250,220,.45);
+ color:#effff5;font:11px/1.4 monospace;pointer-events:none;
+ backdrop-filter:blur(12px);box-shadow:0 7px 25px rgba(0,20,24,.19);}
+.perf-telemetry strong{font-size:16px;line-height:1.15;color:#d7ffe4}
+.perf-telemetry small{font-size:9px;color:#b3d2c7}
+@media(max-width:700px){.perf-telemetry{top:80px;right:12px;padding:7px 9px;font-size:9px}.perf-telemetry strong{font-size:13px}}

@@ -17,6 +17,7 @@ import {
   type Quality,
 } from "./topology";
 export type Phase = "welcome" | "arriving" | "terminal" | "exploring";
+export interface RenderTelemetry { fps:number; drawCalls:number; triangles:number; quality:Quality; }
 export interface WorldSnapshot {
   phase: Phase;
   activated: boolean;
@@ -35,6 +36,7 @@ interface Options {
   onReady: () => void;
   onInteract?: (id: PlaceId) => void;
   onMap?: () => void;
+  onMetrics?: (sample:RenderTelemetry) => void;
 }
 export class EmeraldEngine {
   private scene = new THREE.Scene();
@@ -57,6 +59,9 @@ export class EmeraldEngine {
   private elevation = 0.69;
   private distance = 76;
   private velocity = new THREE.Vector2();
+  private metricElapsed=0;
+  private metricFrames=0;
+  private gamepadInteractHeld=false;
   private route: [number, number][] = [];
   private keys = new Set<string>();
   private joystick = new THREE.Vector2();
@@ -220,6 +225,7 @@ export class EmeraldEngine {
   setPaused(value: boolean) {
     this.paused = value;
     this.keys.clear();
+    this.gamepadInteractHeld=false;
     this.joystick?.set(0, 0);
     this.virtualRun = false;
     this.pointers.clear();
@@ -390,6 +396,19 @@ export class EmeraldEngine {
     try {
       if (this.composer) this.composer.render();
       else this.renderer.render(this.scene, this.camera);
+      if(this.options.onMetrics && !this.paused && this.phase==="exploring"){
+        this.metricElapsed+=dt;
+        this.metricFrames++;
+        if(this.metricElapsed>=1){
+          this.options.onMetrics({
+            fps:Math.round(this.metricFrames/this.metricElapsed),
+            drawCalls:this.renderer.info.render.calls,
+            triangles:this.renderer.info.render.triangles,
+            quality:this.options.quality
+          });
+          this.metricElapsed=0;this.metricFrames=0;
+        }
+      }
     } catch {
       this.options.onError();
       this.stop();
@@ -461,14 +480,28 @@ export class EmeraldEngine {
       if (this.keys.has("s") || this.keys.has("arrowdown")) forward = -1;
       if (this.keys.has("d") || this.keys.has("arrowright")) right = 1;
       if (this.keys.has("a") || this.keys.has("arrowleft")) right = -1;
+      const pad = typeof navigator !== "undefined" && typeof navigator.getGamepads === "function"
+        ? Array.from(navigator.getGamepads()).find((g):g is Gamepad=>Boolean(g)) : undefined;
+      if(pad && !this.paused){
+        const activated=pad.buttons[0]?.pressed===true;
+        if(activated && !this.gamepadInteractHeld)this.interact();
+        this.gamepadInteractHeld=activated;
+        if(Math.abs(pad.axes[2]??0)>.15)this.azimuth-=(pad.axes[2]??0)*dt*2.4;
+        if(Math.abs(pad.axes[3]??0)>.15)
+          this.elevation=THREE.MathUtils.clamp(this.elevation+(pad.axes[3]??0)*dt*1.4,.24,1.28);
+      } else this.gamepadInteractHeld=false;
       if (!forward && !right) { forward = this.joystick?.y ?? 0; right = this.joystick?.x ?? 0; }
+      if (!forward && !right && pad){
+        forward=Math.abs(pad.axes[1]??0)>.16 ? -(pad.axes[1]??0) : 0;
+        right=Math.abs(pad.axes[0]??0)>.16 ? (pad.axes[0]??0) : 0;
+      }
       let dx=0,dz=0;
       this.velocity ??= new THREE.Vector2();
       if(forward||right){
         const intendedX=-Math.sin(this.azimuth)*forward+Math.cos(this.azimuth)*right;
         const intendedZ=-Math.cos(this.azimuth)*forward-Math.sin(this.azimuth)*right;
         const normalized=Math.max(1,Math.hypot(intendedX,intendedZ));
-        const speed=(this.keys.has("shift")||this.virtualRun?4.4:2.6);
+        const speed=(this.keys.has("shift")||this.virtualRun||pad?.buttons[7]?.pressed?4.4:2.6);
         this.velocity.lerp(
           new THREE.Vector2(intendedX/normalized*speed,intendedZ/normalized*speed),
           1-Math.exp(-dt*9)
@@ -514,7 +547,7 @@ export class EmeraldEngine {
           env.character.rotation.y += delta * Math.min(1, dt * 12);
         }
       }
-      const cadence = this.keys.has("shift") || this.virtualRun ? 15 : 10;
+      const cadence = this.keys.has("shift") || this.virtualRun || pad?.buttons[7]?.pressed ? 15 : 10;
       const swing = moving ? Math.sin(time * cadence) * 0.42 : 0;
       env.limbs.forEach(
         (l, i) => (l.rotation.x = swing * (i === 0 || i === 3 ? 1 : -1)),

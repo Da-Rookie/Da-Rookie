@@ -4,6 +4,8 @@ import {Water} from "three/addons/objects/Water.js";
 import {nodes,edges,places,heights,presets,platformRadius,groundHeight,PATH_WIDTH,isWalkable,type Quality} from "./topology";
 import {surface,waterNormal,labelTexture,random} from "./materials";
 import { dressZone, type ZoneKind } from "./zoneDressing";
+import { decorateArchitecture } from "./architectureLandmarks";
+import { polishEmm } from "./characterArt";
 
 export interface Environment {
  root:THREE.Group;water:Water|THREE.Mesh;beacons:THREE.Group[];
@@ -174,7 +176,9 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
     box(g,timber,ix*2,.75,0,2.5,.17,1.5);
     box(g,frame,ix*2,.43,0,.16,.75,1.2);
    }
-  const dressed=dressZone(g,kind,width,depth,quality,{stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf});
+  const palette={stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf};
+  decorateArchitecture(g,kind,width,depth,quality,palette);
+  const dressed=dressZone(g,kind,width,depth,quality,palette);
   playerColliders.push(...dressed.colliders);
   animated.push(...dressed.animated);
    return;
@@ -191,7 +195,9 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
     const plinth=cylinder(g,frame,xx,1.3,-2,.22,1.0,.22);
     plinth.castShadow=true;
    }
-  const dressed=dressZone(g,kind,width,depth,quality,{stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf});
+  const palette={stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf};
+  decorateArchitecture(g,kind,width,depth,quality,palette);
+  const dressed=dressZone(g,kind,width,depth,quality,palette);
   playerColliders.push(...dressed.colliders);
   animated.push(...dressed.animated);
    return;
@@ -265,7 +271,9 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
    cylinder(g,grass,side*(w-1.1),1.23,d-1,.66,.65,.32,9);
   }
   // Detailed storytelling elements remain subordinate to entrances and central navigation.
-  const dressed=dressZone(g,kind,width,depth,quality,{stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf});
+  const palette={stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf};
+  decorateArchitecture(g,kind,width,depth,quality,palette);
+  const dressed=dressZone(g,kind,width,depth,quality,palette);
   playerColliders.push(...dressed.colliders);
   animated.push(...dressed.animated);
   // Camera and locomotion collide against authored structural glass, never foliage.
@@ -371,6 +379,7 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
   mesh(new THREE.SphereGeometry(.03,8,6),hair,character,side*.083,1.78,.21,false);
   box(character,gold,side*.23,1.14,.1,.07,.31,.05);
  }
+ polishEmm(character,limbs,quality);
  character.position.set(...[nodes[0][0],heights[0],nodes[0][1]]);
  character.traverse(o=>{if(o instanceof THREE.Mesh)o.castShadow=true});
  return {root,water,beacons,character,limbs,boat,lights,animated,reflectionTargets,sky,sunlight,cameraColliders,playerColliders};
