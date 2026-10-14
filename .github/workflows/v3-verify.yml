@@ -1,18 +1,28 @@
-name: V3 verification
+name: V3 engineering verification
 on:
   push:
     branches: [v3]
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
-      - run: npm ci
-      - run: npm run check:content
-      - run: npm run test:v3
-      - run: npm run build
+          cache: pnpm
+      - name: Install pinned dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Verify professional facts
+        run: pnpm run check:content
+      - name: Verify routing, content and game states
+        run: pnpm run test:v3
+      - name: Verify TypeScript and production build
+        run: pnpm run build
