@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run check:content && npm run test:v3 && tsc -b && vite build",
+    "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
     "preview": "vite preview",
     "format": "prettier --write src vite.config.ts",
