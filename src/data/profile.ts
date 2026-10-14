@@ -7,6 +7,10 @@ export const profile = {
   description:
     "I build digital products, intelligent automation, and scalable systems that solve real business problems, from architecture and development to project execution and leadership.",
   location: "Jakarta, Indonesia",
+  currentRoles: [
+    { title: "AI Engineer", company: "PT Pertamina Bina Medika IHC", period: "Aug 2026 — Present" },
+    { title: "Project Manager", company: "ReCreate Academy", period: "Aug 2026 — Present" },
+  ],
   currentRole: {
     title: "Project Manager",
     company: "ReCreate Academy",
