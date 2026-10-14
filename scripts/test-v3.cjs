@@ -39,12 +39,14 @@ function loadTS(file, globals = {}) {
 const t = loadTS("src/emerald/topology.ts");
 const plain = (v) => JSON.parse(JSON.stringify(v));
 assert.equal(t.places.length, 8);
-assert.equal(t.isWalkable(0, 0), false, "Central bay must not be walkable");
+assert.equal(t.isWalkable(0, 0), true, "Bay Plaza must be walkable");
+assert.equal(t.isWalkable(0, -75), false, "Ocean must not be walkable");
 assert.equal(t.isWalkable(90, 90), false, "Open sea must not be walkable");
 for (const [x, z] of [
-  [-17, -13],
-  [27, 0],
-  [5, -20],
+  [-29, 18],
+  [28, 18],
+  [0, 40],
+  [36, -10],
 ])
   assert(t.isWalkable(x, z), "Building interiors reachable");
 for (let a = 0; a < t.nodes.length; a++)
@@ -97,9 +99,9 @@ for (let i = 0; i < samples.length; i += 3)
     routeChecks++;
   }
 assert.deepEqual(
-  plain(t.routeTo(0, 0, 1, 1)),
+  plain(t.routeTo(0, -75, 1, 1)),
   [],
-  "Reject water-to-water route",
+  "Reject offshore travel requests",
 );
 assert(
   t.presets.high.texture > t.presets.medium.texture &&
@@ -242,7 +244,7 @@ function engineFixture() {
   assert(e.env.character.visible, "Character visible on boat");
   e.animate(10);
   assert.equal(e.phase, "terminal");
-  assert.equal(e.env.character.position.x, -15);
+  assert.equal(e.env.character.position.x, 0);
   e.activate();
   assert.equal(e.phase, "exploring");
   e.travel("gallery");

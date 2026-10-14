@@ -4,10 +4,12 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { createEnvironment, type Environment } from "./environment";
+import { createEnvironment, type Environment } from "./finalWorld";
 import {
   places,
   nodes,
+  heights,
+  groundHeight,
   isWalkable,
   routeTo,
   presets,
@@ -52,7 +54,8 @@ export class EmeraldEngine {
   private target = new THREE.Vector3(0, 2, 0);
   private azimuth = 0.24;
   private elevation = 0.69;
-  private distance = 55;
+  private distance = 76;
+  private velocity = new THREE.Vector2();
   private route: [number, number][] = [];
   private keys = new Set<string>();
   private joystick = new THREE.Vector2();
@@ -92,8 +95,8 @@ export class EmeraldEngine {
     this.renderer.domElement.setAttribute("role", "img");
     this.renderer.domElement.tabIndex = 0;
     this.host.prepend(this.renderer.domElement);
-    this.scene.background = new THREE.Color("#c6edf1");
-    this.scene.fog = new THREE.FogExp2("#c9e9e6", 0.0027);
+    this.scene.background = new THREE.Color("#b4e8ed");
+    this.scene.fog = new THREE.FogExp2("#c9e9e6", 0.0022);
     this.env = createEnvironment(this.scene, this.renderer, options.quality);
     if (presets[options.quality].bloom) {
       this.composer = new EffectComposer(this.renderer);
@@ -167,6 +170,9 @@ export class EmeraldEngine {
     }
     this.setPhase(s.phase);
     this.env.character.position.fromArray(s.position);
+    if(!isWalkable(this.env.character.position.x,this.env.character.position.z)){
+      this.env.character.position.set(nodes[0][0],heights[0],nodes[0][1]);
+    }
     if (s.phase !== "welcome") this.target.copy(this.env.character.position);
   }
   private resize() {
@@ -194,11 +200,11 @@ export class EmeraldEngine {
   }
   skip() {
     this.env.character.visible = true;
-    this.env.character.position.set(-15, 1.08, 17);
-    this.env.boat.position.set(-11, 0.25, 22);
+    this.env.character.position.set(nodes[0][0], heights[0], nodes[0][1]);
+    this.env.boat.position.set(0, 0, -59);
     this.env.boat.rotation.y = 0.2;
-    this.distance = 10;
-    this.elevation = 0.52;
+    this.distance = 7.8;
+    this.elevation = 0.42;
     this.azimuth = 0.05;
     this.target.copy(this.env.character.position);
     this.setPhase(this.activated ? "exploring" : "terminal");
@@ -233,13 +239,13 @@ export class EmeraldEngine {
   }
   resetCamera() {
     if (this.phase === "welcome") {
-      this.target.set(0, 1, -1);
-      this.distance = window.innerWidth < 700 ? 77 : 58;
-      this.elevation = 0.68;
-      this.azimuth = 0.23;
+      this.target.set(0, 6, 6);
+      this.distance = window.innerWidth < 700 ? 115 : 87;
+      this.elevation = 0.67;
+      this.azimuth = 0.18;
     } else {
-      this.distance = 10;
-      this.elevation = 0.58;
+      this.distance = 7.8;
+      this.elevation = 0.46;
       this.azimuth = 0.12;
     }
   }
@@ -248,9 +254,9 @@ export class EmeraldEngine {
     if (this.phase === "welcome" || this.phase === "arriving") this.skip();
     if (!this.activated) this.activate();
     const p = nodes[place.node];
-    this.env.character.position.set(p[0], 1.08, p[1] + 1.7);
+    this.env.character.position.set(p[0], heights[place.node], p[1]);
     this.route = [];
-    this.distance = 10;
+    this.distance = 7.8;
     this.target.copy(this.env.character.position);
     this.options.onVisit(id);
   }
@@ -309,8 +315,8 @@ export class EmeraldEngine {
       if (this.pinch > 0)
         this.distance = THREE.MathUtils.clamp(
           (this.distance * this.pinch) / Math.max(len, 1),
-          8,
-          65,
+          3.2,
+          16,
         );
       this.pinch = len;
       this.drag = true;
@@ -331,26 +337,8 @@ export class EmeraldEngine {
     const was = this.pointers.has(e.pointerId);
     this.pointers.delete(e.pointerId);
     if (!was || this.paused) return;
-    if (!this.drag && this.pointers.size === 0) {
-      this.pointer.set(
-        ((e.clientX - this.rect.left) / this.rect.width) * 2 - 1,
-        (-(e.clientY - this.rect.top) / this.rect.height) * 2 + 1,
-      );
-      this.ray.setFromCamera(this.pointer, this.camera);
-      const hit = new THREE.Vector3();
-      const intersects = this.ray.ray.intersectPlane(
-        new THREE.Plane(new THREE.Vector3(0, 1, 0), -1.08),
-        hit,
-      );
-      if (intersects && isWalkable(hit.x, hit.z)) {
-        this.route = routeTo(
-          this.env.character.position.x,
-          this.env.character.position.z,
-          hit.x,
-          hit.z,
-        );
-      }
-    }
+    // Click-to-move is intentionally disabled. Direct character controls are primary.
+    // World markers and the accessible map remain the two explicit spatial actions.
     if (!this.pointers.size) this.pinch = 0;
   };
   private pointerCancel = (e: PointerEvent) => {
@@ -364,8 +352,8 @@ export class EmeraldEngine {
     e.preventDefault();
     this.distance = THREE.MathUtils.clamp(
       this.distance + e.deltaY * 0.025,
-      8,
-      65,
+      3.2,
+      16,
     );
   };
   private tick = () => {
@@ -422,21 +410,15 @@ export class EmeraldEngine {
       const t = Math.min(1, this.introTime / 10),
         ease = t * t * (3 - 2 * t);
       env.boat.position.set(
-        -5 - ease * 6,
-        0.25 + Math.sin(time * 2) * 0.04,
-        43 - ease * 21,
+        0,
+        .0 + Math.sin(time * 2) * .04,
+        -84 + ease * 34,
       );
-      env.boat.rotation.y = -0.25;
-      env.character.position
-        .copy(env.boat.position)
-        .add(new THREE.Vector3(0, 0.57, -0.9));
-      env.character.rotation.y = Math.PI;
-      this.camera.position.set(
-        10 - ease * 26,
-        3 + Math.sin(t * Math.PI) * 5,
-        49 - ease * 24,
-      );
-      this.camera.lookAt(-8, 3, -7);
+      env.boat.rotation.y = Math.PI;
+      env.character.position.copy(env.boat.position).add(new THREE.Vector3(0,.58,.4));
+      env.character.rotation.y = 0;
+      this.camera.position.set(23-ease*16,7+Math.sin(t*Math.PI)*8,-94+ease*32);
+      this.camera.lookAt(0, 6+ease*3, -12+ease*8);
       if (t === 1) this.skip();
       return;
     }
@@ -496,17 +478,10 @@ export class EmeraldEngine {
       env.limbs.forEach(
         (l, i) => (l.rotation.x = swing * (i === 0 || i === 3 ? 1 : -1)),
       );
-      const floor =
-        p.x > -22.1 && p.x < -11.9 && p.z > -15.9 && p.z < -10.1
-          ? 1.49
-          : p.x > 0.2 && p.x < 9.8 && p.z > -22.3 && p.z < -17.7
-            ? 1.3
-            : Math.hypot(p.x - 27, p.z) < 4.6
-              ? 1.32
-              : 1.08;
+      const floor = groundHeight(p.x,p.z);
       p.y = floor + (moving ? Math.abs(Math.sin(time * 11)) * 0.035 : 0);
       this.near = null;
-      let best = 5;
+      let best = 6;
       places.forEach((place) => {
         const [x, z] = nodes[place.node],
           d = Math.hypot(x - p.x, z - p.z);
@@ -536,9 +511,14 @@ export class EmeraldEngine {
       Math.sin(this.elevation) * this.distance,
       Math.cos(this.azimuth) * Math.cos(this.elevation) * this.distance,
     ).add(this.target);
-    if (this.options.reducedMotion || this.time < 0.1)
-      this.camera.position.copy(desired);
-    else this.camera.position.lerp(desired, 1 - Math.exp(-dt * 4));
+    if (this.phase !== "welcome" && this.env.cameraColliders?.length) {
+      const offset = desired.clone().sub(this.target),length=offset.length();
+      const sight=new THREE.Raycaster(this.target,offset.normalize(),.35,length);
+      const hits=sight.intersectObjects(this.env.cameraColliders,false);
+      if(hits.length)desired.copy(this.target).addScaledVector(offset,Math.max(2.8,hits[0].distance-.35));
+    }
+    if (this.options.reducedMotion || this.time < 0.1) this.camera.position.copy(desired);
+    else this.camera.position.lerp(desired,1-Math.exp(-dt*4.5));
     this.camera.lookAt(this.target);
   }
   private projectMarkers() {
@@ -546,7 +526,7 @@ export class EmeraldEngine {
       const el = this.markers[i];
       if (!el) return;
       const [x, z] = nodes[p.node];
-      this.markerVector.set(x, 3.4, z).project(this.camera);
+      this.markerVector.set(x, heights[p.node] + 3.4, z).project(this.camera);
       const visible =
         this.phase !== "welcome" &&
         this.phase !== "arriving" &&

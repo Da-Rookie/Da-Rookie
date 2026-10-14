@@ -513,37 +513,37 @@ function IslandMap({ visited, onTravel }: Props) {
       </p>
       <div className="island-map">
         <svg
-          viewBox="-34 -30 72 63"
+          viewBox="-77 -71 155 137"
           role="img"
-          aria-label="Waterfront walking loop connects the arrival pier, project lab, career terrace, recognition gallery and conversation deck"
+          aria-label="Top-down map of Emerald Bay showing eight destinations and connected walking routes"
         >
           <path
-            d="M -27 17 C -40 -3 -28 -30 -3 -28 C 22 -32 37 -18 32 8 L 26 17 L 18 10 C 29 -4 8 -19 -5 -14 C -23 -10 -21 5 -19 12Z"
+            d="M -66 42 L -72 28 L -66 5 L -69 -15 L -63 -35 L -46 -48 L -22 -57 L 0 -62 L 28 -55 L 51 -41 L 64 -17 L 70 11 L 63 32 L 50 46 L 28 50 L 8 47 L -13 48 L -39 46 Z"
             fill="#244b3f"
+            stroke="#4c9578"
+            strokeWidth="1"
           />
           <path
             d={edges
-              .map(
-                ([a, b]) =>
-                  `M ${nodes[a][0]} ${nodes[a][1]} L ${nodes[b][0]} ${nodes[b][1]}`,
-              )
+              .map(([a, b]) =>
+                `M ${nodes[a][0]} ${-nodes[a][1]} L ${nodes[b][0]} ${-nodes[b][1]}`)
               .join(" ")}
             fill="none"
-            stroke="#86d8bd"
-            strokeWidth=".7"
-            strokeDasharray="1.5 1"
+            stroke="#9ce7c5"
+            strokeWidth="1.5"
+            strokeLinecap="round"
           />
           {places.map((p, i) => {
             const [x, z] = nodes[p.node];
             return (
               <g key={p.id}>
-                <circle cx={x} cy={z} r="2" fill={p.color} />
+                <circle cx={x} cy={-z} r="4.4" fill={p.color} />
                 <text
                   x={x}
-                  y={z + 0.85}
+                  y={-z + 1}
                   textAnchor="middle"
                   fill="#092e2b"
-                  fontSize="2.3"
+                  fontSize="3.6"
                 >
                   {i + 1}
                 </text>
@@ -551,11 +551,11 @@ function IslandMap({ visited, onTravel }: Props) {
             );
           })}
           <text
-            x="1"
-            y="4"
+            x="0"
+            y="-3"
             textAnchor="middle"
             fill="#80aaa6"
-            fontSize="2.2"
+            fontSize="3.1"
             letterSpacing=".9"
           >
             EMERALD BAY

@@ -1,263 +1,96 @@
-export type PlaceId = "arrival" | "plaza" | "lab" | "automate" | "lead" | "terrace" | "gallery" | "contact";
-export type PanelId =
-  | "works"
-  | "about"
-  | "experience"
-  | "recognition"
-  | "contact"
-  | "map"
-  | "settings"
-  | "help";
-export type Quality = "low" | "medium" | "high";
-export const presets = {
-  low: {
-    dpr: 1,
-    texture: 256,
-    shadow: 0,
-    reflection: 0,
-    trees: 22,
-    grass: 0,
-    bloom: false,
-  },
-  medium: {
-    dpr: 1.5,
-    texture: 512,
-    shadow: 1024,
-    reflection: 256,
-    trees: 38,
-    grass: 650,
-    bloom: false,
-  },
-  high: {
-    dpr: 2,
-    texture: 2048,
-    shadow: 2048,
-    reflection: 1024,
-    trees: 65,
-    grass: 2400,
-    bloom: true,
-  },
+// Emerald Bay Lab — spatial contract v4. Coordinates in metres: X east, Z north, Y up.
+// Shared by placement, HUD map, collision-aware locomotion and automatic QA.
+export type PlaceId="arrival"|"plaza"|"terrace"|"lab"|"automate"|"lead"|"gallery"|"contact";
+export type PanelId="works"|"about"|"experience"|"recognition"|"contact"|"map"|"settings"|"help";
+export type Quality="low"|"medium"|"high";
+export const presets={
+ low:{dpr:1,texture:256,shadow:0,reflection:0,trees:32,grass:0,bloom:false},
+ medium:{dpr:1.5,texture:512,shadow:1024,reflection:256,trees:85,grass:1400,bloom:false},
+ high:{dpr:2,texture:1024,shadow:2048,reflection:512,trees:145,grass:3200,bloom:true}
 } as const;
-export const places: {
-  id: PlaceId;
-  title: string;
-  label: string;
-  description: string;
-  panel: PanelId;
-  node: number;
-  color: string;
-}[] = [
-  {
-    id: "arrival",
-    title: "Arrival pier",
-    label: "The beginning",
-    description: "Arrive. Activate. Explore.",
-    panel: "help",
-    node: 0,
-    color: "#b7f2d3",
-  },
-  {
-    id: "plaza",
-    title: "Bay Plaza", label: "Explore the island",
-    description: "Every direction is a new chapter.", panel: "help", node: 14, color: "#e5dfba",
-  },
-  {
-    id: "lab",
-    title: "BUILD — Engineering Studio",
-    label: "BUILD Studio",
-    description: "Ideas made tangible. Systems made useful.",
-    panel: "works",
-    node: 3,
-    color: "#85eddc",
-  },
-  {
-    id: "terrace",
-    title: "Origins — Career Terrace",
-    label: "Origins",
-    description: "The person, the practice, the professional journey.",
-    panel: "about",
-    node: 6,
-    color: "#c6d8a0",
-  },
-  {
-    id: "automate",
-    title: "AUTOMATE — Intelligent Systems", label: "AUTOMATE Lab",
-    description: "Intelligent systems, practical impact.", panel: "works", node: 1, color: "#7ddbcf",
-  },
-  {
-    id: "lead",
-    title: "LEAD — Strategy & Command Center", label: "LEAD Center",
-    description: "From decisions to delivery.", panel: "experience", node: 11, color: "#ead4a7",
-  },
-  {
-    id: "gallery",
-    title: "Recognition Gallery",
-    label: "A trail of evidence",
-    description: "Work recognized. Knowledge shared.",
-    panel: "recognition",
-    node: 9,
-    color: "#e0b6ee",
-  },
-  {
-    id: "contact",
-    title: "Horizon — Contact Deck",
-    label: "What comes next",
-    description: "Good work begins with a conversation.",
-    panel: "contact",
-    node: 12,
-    color: "#e9c799",
-  },
+export const nodes:[number,number][]=[
+ [0,-50],[0,-30],[0,-8],[-16,-10],[-32,-10],[-38,2],[-29,18],[-16,29],
+ [0,40],[15,29],[28,18],[38,5],[36,-10],[44,-20],[53,-30],[27,-26],[15,-17],
+ [-16,10],[16,10],[0,25],[0,0]
 ];
-// The waterfront is a continuous, single-island loop. Nodes lie on raised paths/platforms.
-export const nodes: [number, number][] = [
-  [-15, 17],
-  [-18, 11],
-  [-18, 2],
-  [-16, -7],
-  [-11, -13],
-  [-3, -16],
-  [5, -15],
-  [13, -13],
-  [19, -8],
-  [21, 0],
-  [21, 8],
-  [17, 14],
-  [9, 18],
-  [1, 19],
-  [-7, 19],
-  [-17, -13],
-  [27, 0],
-  [5, -20],
+export const heights:number[]=[1.1,1.8,3.5,4.2,4.5,5.2,6.5,8,10.5,8,6.5,5.5,4.5,3.8,3,3.1,3.4,5.5,5.5,8.2,4];
+export const edges:[number,number][]=[
+ [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],
+ [10,11],[11,12],[12,13],[13,14],[14,15],[15,16],[16,2],
+ [2,17],[17,6],[2,18],[18,10],[2,19],[19,8],[2,20],[17,19],[18,19]
 ];
-export const edges: [number, number][] = [
-  ...nodes.slice(0, 15).map((_, i) => [i, (i + 1) % 15] as [number, number]),
-  [3, 15],
-  [9, 16],
-  [6, 17],
+export const places:{id:PlaceId,title:string,label:string,description:string,panel:PanelId,node:number,color:string}[]=[
+ {id:"arrival",title:"Arrival Pier",label:"The Beginning",description:"Arrive. Activate. Explore.",panel:"help",node:0,color:"#d1f5e0"},
+ {id:"plaza",title:"Bay Plaza",label:"World Hub",description:"A living world. Your journey begins here.",panel:"help",node:20,color:"#e7e1be"},
+ {id:"terrace",title:"Origins Terrace",label:"The Journey",description:"From understanding operations to creating meaningful technology.",panel:"about",node:4,color:"#c6d8a0"},
+ {id:"lab",title:"BUILD — Engineering Studio",label:"Products & Systems",description:"Architecture, engineering and products with purpose.",panel:"works",node:6,color:"#78e3c4"},
+ {id:"automate",title:"AUTOMATE — Intelligent Systems Lab",label:"AI & Automation",description:"From real workflows to intelligent experiences.",panel:"works",node:10,color:"#95eaf2"},
+ {id:"lead",title:"LEAD — Strategy Center",label:"Strategy & Leadership",description:"Shaping products and coordinating people toward delivery.",panel:"experience",node:8,color:"#edcc89"},
+ {id:"gallery",title:"Recognition Gallery",label:"Evidence of Craft",description:"Research, awards and professional learning.",panel:"recognition",node:12,color:"#e4c2f2"},
+ {id:"contact",title:"Horizon — Contact Deck",label:"The Next Chapter",description:"Good work begins with a conversation.",panel:"contact",node:14,color:"#efd39d"}
 ];
-export const PATH_WIDTH = 3.6;
-export const platformRadius = (i: number) =>
-  [0, 3, 6, 9, 12].includes(i) ? 4.5 : 2.2;
-export function nearestNode(x: number, z: number) {
-  let best = 0,
-    d = Infinity;
-  nodes.forEach(([nx, nz], i) => {
-    const v = Math.hypot(nx - x, nz - z);
-    if (v < d) {
-      best = i;
-      d = v;
-    }
-  });
-  return best;
+export const PATH_WIDTH=4.6;
+export const platformRadius=(i:number)=>({0:4.8,2:7,4:9,6:10,8:11,10:10,12:9,14:8,20:11} as Record<number,number>)[i]||3.4;
+export function pointOnSegment(x:number,z:number,a:[number,number],b:[number,number]):[number,number] {
+ const dx=b[0]-a[0],dz=b[1]-a[1],d=dx*dx+dz*dz;
+ const t=Math.max(0,Math.min(1,d?((x-a[0])*dx+(z-a[1])*dz)/d:0));
+ return [a[0]+dx*t,a[1]+dz*t];
 }
-export function pointOnSegment(
-  x: number,
-  z: number,
-  a: [number, number],
-  b: [number, number],
-) {
-  const dx = b[0] - a[0],
-    dz = b[1] - a[1];
-  const t = Math.max(
-    0,
-    Math.min(1, ((x - a[0]) * dx + (z - a[1]) * dz) / (dx * dx + dz * dz)),
-  );
-  return [a[0] + dx * t, a[1] + dz * t] as [number, number];
+export function nearestNode(x:number,z:number){let best=0,dist=Infinity;nodes.forEach(([a,b],i)=>{const d=Math.hypot(x-a,z-b);if(d<dist){dist=d;best=i}});return best;}
+export function groundHeight(x:number,z:number) {
+ let best=Infinity,result=heights[0];
+ for(const [a,b] of edges){
+  const p=pointOnSegment(x,z,nodes[a],nodes[b]);
+  const abx=nodes[b][0]-nodes[a][0],abz=nodes[b][1]-nodes[a][1],length=abx*abx+abz*abz;
+  const t=Math.max(0,Math.min(1,length?((p[0]-nodes[a][0])*abx+(p[1]-nodes[a][1])*abz)/length:0));
+  const d=Math.hypot(x-p[0],z-p[1]);
+  if(d<best){best=d;result=heights[a]+(heights[b]-heights[a])*t;}
+ }
+ // Expanded platforms are kept level for furniture/character interaction.
+ for(const p of places){const [px,pz]=nodes[p.node],rad=platformRadius(p.node)-1.2;
+  if(Math.hypot(x-px,z-pz)<rad)return heights[p.node];
+ }
+ return result;
 }
-export function isWalkable(x: number, z: number) {
-  // Interior floor regions join the waterfront; world furniture stays outside the movement lane.
-  const insideLab = x > -22.1 && x < -11.9 && z > -15.9 && z < -10.1;
-  const insideTerrace = x > 0.2 && x < 9.8 && z > -22.3 && z < -17.7;
-  const insideGallery = Math.hypot(x - 27, z) < 4.6;
-  return (
-    insideLab ||
-    insideTerrace ||
-    insideGallery ||
-    nodes.some(
-      ([nx, nz], i) => Math.hypot(x - nx, z - nz) <= platformRadius(i) - 0.45,
-    ) ||
-    edges.some(([a, b]) => {
-      const p = pointOnSegment(x, z, nodes[a], nodes[b]);
-      return Math.hypot(x - p[0], z - p[1]) <= PATH_WIDTH / 2 - 0.35;
-    })
-  );
+export function isWalkable(x:number,z:number) {
+ return nodes.some(([a,b],i)=>Math.hypot(x-a,z-b)<=platformRadius(i)-0.42)||
+ edges.some(([a,b])=>{const p=pointOnSegment(x,z,nodes[a],nodes[b]);return Math.hypot(x-p[0],z-p[1])<=PATH_WIDTH/2-0.37;});
 }
-export function pathBetween(from: number, to: number): number[] {
-  const dist = nodes.map(() => Infinity),
-    prev = nodes.map(() => -1),
-    seen = new Set<number>();
-  dist[from] = 0;
-  while (seen.size < nodes.length) {
-    let u = -1;
-    nodes.forEach((_, i) => {
-      if (!seen.has(i) && (u < 0 || dist[i] < dist[u])) u = i;
-    });
-    if (u < 0 || !Number.isFinite(dist[u])) break;
-    if (u === to) break;
-    seen.add(u);
-    for (const [a, b] of edges) {
-      const v = a === u ? b : b === u ? a : -1;
-      if (v < 0) continue;
-      const d =
-        dist[u] +
-        Math.hypot(nodes[u][0] - nodes[v][0], nodes[u][1] - nodes[v][1]);
-      if (d < dist[v]) {
-        dist[v] = d;
-        prev[v] = u;
-      }
-    }
+export function pathBetween(from:number,to:number):number[]{
+ if(from<0||to<0||from>=nodes.length||to>=nodes.length)return [];
+ const distance=nodes.map(()=>Infinity),prev=nodes.map(()=>-1),used=new Set<number>();
+ distance[from]=0;
+ for(let n=0;n<nodes.length;n++){
+  let best=-1;for(let i=0;i<nodes.length;i++)if(!used.has(i)&&(best<0||distance[i]<distance[best]))best=i;
+  if(best<0||!Number.isFinite(distance[best])||best===to)break;
+  used.add(best);
+  for(const [a,b] of edges){
+   const dest=a===best?b:b===best?a:-1;
+   if(dest<0)continue;
+   const alt=distance[best]+Math.hypot(nodes[best][0]-nodes[dest][0],nodes[best][1]-nodes[dest][1]);
+   if(alt<distance[dest]){distance[dest]=alt;prev[dest]=best;}
   }
-  const route = [to];
-  while (route[0] !== from && prev[route[0]] >= 0)
-    route.unshift(prev[route[0]]);
-  return route[0] === from ? route : [];
+ }
+ const path=[to];while(path[0]!==from&&prev[path[0]]>=0)path.unshift(prev[path[0]]);
+ return path[0]===from?path:[];
 }
-function segmentWalkable(a: [number, number], b: [number, number]) {
-  const samples = Math.max(
-    2,
-    Math.ceil(Math.hypot(a[0] - b[0], a[1] - b[1]) / 0.18),
-  );
-  for (let i = 0; i <= samples; i++)
-    if (
-      !isWalkable(
-        a[0] + ((b[0] - a[0]) * i) / samples,
-        a[1] + ((b[1] - a[1]) * i) / samples,
-      )
-    )
-      return false;
-  return true;
+function lineWalkable(a:[number,number],b:[number,number]){
+ const dist=Math.hypot(b[0]-a[0],b[1]-a[1]),steps=Math.max(2,Math.ceil(dist/0.12));
+ for(let j=0;j<=steps;j++)if(!isWalkable(a[0]+(b[0]-a[0])*j/steps,a[1]+(b[1]-a[1])*j/steps))return false;
+ return true;
 }
-export function routeTo(
-  x: number,
-  z: number,
-  tx: number,
-  tz: number,
-): [number, number][] {
-  const start: [number, number] = [x, z],
-    end: [number, number] = [tx, tz];
-  if (!isWalkable(x, z) || !isWalkable(tx, tz)) return [];
-  if (segmentWalkable(start, end)) return [end];
-  const starts = nodes
-    .map((p, i) => ({ p, i }))
-    .filter(({ p }) => segmentWalkable(start, p));
-  const ends = nodes
-    .map((p, i) => ({ p, i }))
-    .filter(({ p }) => segmentWalkable(p, end));
-  let best: [number, number][] = [],
-    cost = Infinity;
-  for (const a of starts)
-    for (const b of ends) {
-      const path = [start, ...pathBetween(a.i, b.i).map((i) => nodes[i]), end];
-      const length = path
-        .slice(1)
-        .reduce(
-          (n, p, i) => n + Math.hypot(p[0] - path[i][0], p[1] - path[i][1]),
-          0,
-        );
-      if (length < cost) {
-        cost = length;
-        best = path.slice(1);
-      }
-    }
-  return best;
+export function routeTo(x:number,z:number,tx:number,tz:number):[number,number][]{
+ const start:[number,number]=[x,z],end:[number,number]=[tx,tz];
+ if(!isWalkable(x,z)||!isWalkable(tx,tz))return [];
+ if(lineWalkable(start,end))return [end];
+ const beginnings=nodes.map((p,i)=>({p,i})).filter(v=>lineWalkable(start,v.p));
+ const endings=nodes.map((p,i)=>({p,i})).filter(v=>lineWalkable(v.p,end));
+ let best:[number,number][]=[],min=Infinity;
+ for(const a of beginnings)for(const b of endings){
+  const path=pathBetween(a.i,b.i);if(!path.length)continue;
+  const pts:[number,number][]=[start,...path.map(i=>nodes[i]),end];
+  const length=pts.slice(1).reduce((sum,p,i)=>sum+Math.hypot(p[0]-pts[i][0],p[1]-pts[i][1]),0);
+  if(length<min&&pts.slice(1).every((p,i)=>lineWalkable(pts[i],p))){min=length;best=pts.slice(1);}
+ }
+ return best;
 }
