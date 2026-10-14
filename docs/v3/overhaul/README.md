@@ -59,7 +59,7 @@ Three.js renders mesh geometry (not raster painting). Quality presets Low/Medium
 
 - Baseline audit commit `a503d387` had working Three.js free exploration, boat arrival, five mapped destinations, text-mode fallback, three graphics presets and correct existing persona, but visual/device validation remained unperformed.
 - This overhaul adds Tropical Daylight/Golden Hour direction, organic pavilion art, palm/scenic layers, eight themed destinations, direct mobile analog movement, run and interact buttons, desktop E/Shift, and a canonical portfolio registry.
-- Legacy topology and procedural character are currently retained. The expansive preliminary 144×116m world plan, individually art-directed Blender/GLB interior architecture, physics capsule/navmesh and final animation rig require separate measurable production approval. Do not describe those as finished.
+- The 144×116m world layout now drives actual meshes, walking surfaces, heights, destination mapping and the minimap. Distinct exterior landmarks and indoor technical exhibits are procedural Three.js assets. Emm has an articulated explorer rig with additional original detailing, but this is not a Blender-skinned/GLB character. Independent human visual/physical-device sign-off and premium authored model intake remain necessary.
 - Original V2 editorial files remain for preservation; no changes are made to `main`.
 
 ## Verification & milestones
@@ -69,6 +69,13 @@ Three.js renders mesh geometry (not raster painting). Quality presets Low/Medium
 3. **Form gate:** review geometry from multiple angles, real openings, no floating/clipping props, materials, ceiling geometry and production camera; explicit visual sign-off.
 4. **Runtime gate:** inspect deployed WebGL scene desktop and Android/iPhone, portrait/landscape, Low/Medium/High, screen-reader reading path, keyboard navigation and real FPS metrics. Explicit sign-off.
 5. **Release:** send preview for owner approval. Merge to main only on new permission; Meshy paid work also requires separate explicit spend approval.
+
+## Current production documents
+
+- [World and room asset register](WORLD_ASSET_REGISTER.md): dimensions, named zones, architectural signatures, original materials, traversal and three graphics tiers
+- [Quality acceptance](QUALITY_ACCEPTANCE.md): Function, Form and Runtime gate checklist plus live \u201c?perf=1\u201d diagnostic procedure
+- [Delivery status](DELIVERY_STATUS.md): delivered features, automated QA and explicit known gaps
+- [Original baseline](../PRD.md): history only when superseded by approved overhaul decisions
 
 ## Outstanding (cannot silently claim complete)
 
