@@ -1,28 +1,45 @@
-name: V3 engineering verification
+name: V3 quality gate
 on:
   push:
     branches: [v3]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: pnpm
-      - name: Install pinned dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Verify professional facts
-        run: pnpm run check:content
-      - name: Verify routing, content and game states
-        run: pnpm run test:v3
-      - name: Verify TypeScript and production build
-        run: pnpm run build
+      - name: Build, test, and capture diagnostics
+        shell: bash
+        run: |
+          set +e
+          mkdir -p docs/v3/overhaul
+          {
+            echo "V3 quality gate from commit $GITHUB_SHA"
+            echo "Node: $(node -v)"
+            echo "Corepack: $(corepack --version)"
+            corepack enable
+            corepack prepare pnpm@10.11.0 --activate
+            echo "pnpm: $(pnpm -v)"
+            pnpm install --frozen-lockfile
+            echo "install status: $?"
+            pnpm run check:content
+            echo "facts status: $?"
+            pnpm run test:v3
+            echo "game test status: $?"
+            pnpm run build
+            echo "build status: $?"
+          } > /tmp/v3-ci-output.log 2>&1
+          cat /tmp/v3-ci-output.log
+          cp /tmp/v3-ci-output.log docs/v3/overhaul/CI_LAST_RUN.txt
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add docs/v3/overhaul/CI_LAST_RUN.txt
+          git commit -m "ci: capture v3 quality checks [skip ci]" || true
+          git push origin HEAD:v3 || true
+          if grep -E -q "install status: [1-9]|facts status: [1-9]|game test status: [1-9]|build status: [1-9]" /tmp/v3-ci-output.log; then exit 1; fi
