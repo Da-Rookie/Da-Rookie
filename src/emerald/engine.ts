@@ -367,10 +367,15 @@ export class EmeraldEngine {
     if(!barriers?.length)return true;
     const direction=new THREE.Vector3(nx-x,0,nz-z),travel=direction.length();
     if(travel<1e-5)return true;
-    this.ray.set(new THREE.Vector3(x,y+1.08,z),direction.normalize());
-    this.ray.near=0;
-    this.ray.far=travel+.33;
-    return this.ray.intersectObjects(barriers,false).length===0;
+    const directionUnit=direction.normalize();
+    // Three capsule samples prevent walking through low tables and chest-height glazing.
+    for(const offsetY of [.35,.88,1.42]){
+      this.ray.set(new THREE.Vector3(x,y+offsetY,z),directionUnit);
+      this.ray.near=0;
+      this.ray.far=travel+.34;
+      if(this.ray.intersectObjects(barriers,false).length)return false;
+    }
+    return true;
   }
   private tick = () => {
     this.frame = 0;
@@ -413,9 +418,18 @@ export class EmeraldEngine {
         );
     }
     env.animated.forEach((o, i) => {
+      // Preserve authored relative position: the old absolute y=2 teleported
+      // exhibits below their platforms on the sloped island.
+      if(typeof o.userData.animatedY !== "number"){
+        o.userData.animatedY=o.position.y;
+        o.userData.animatedYaw=o.rotation.y;
+      }
       if (!this.options.reducedMotion) {
-        o.rotation.y = time * 0.35 + i;
-        o.position.y = 2 + Math.sin(time + i) * 0.1;
+        o.rotation.y = o.userData.animatedYaw + Math.sin(time*.46+i)*.21;
+        o.position.y = o.userData.animatedY + Math.sin(time*1.1 + i) * .055;
+      } else {
+        o.position.y=o.userData.animatedY;
+        o.rotation.y=o.userData.animatedYaw;
       }
     });
     env.lights.forEach((m) => {
@@ -448,25 +462,33 @@ export class EmeraldEngine {
       if (this.keys.has("d") || this.keys.has("arrowright")) right = 1;
       if (this.keys.has("a") || this.keys.has("arrowleft")) right = -1;
       if (!forward && !right) { forward = this.joystick?.y ?? 0; right = this.joystick?.x ?? 0; }
-      let dx = 0,
-        dz = 0;
-      if (forward || right) {
-        dx = -Math.sin(this.azimuth) * forward + Math.cos(this.azimuth) * right;
-        dz = -Math.cos(this.azimuth) * forward - Math.sin(this.azimuth) * right;
-        const l = Math.hypot(dx, dz);
-        const intensity = Math.min(1, l);
-        const speed = this.keys.has("shift") || this.virtualRun ? 4.4 : 2.6;
-        dx = (dx / l) * dt * speed * intensity;
-        dz = (dz / l) * dt * speed * intensity;
-      } else if (this.route.length) {
-        const [x, z] = this.route[0],
-          len = Math.hypot(x - p.x, z - p.z);
-        if (len < 0.15) this.route.shift();
+      let dx=0,dz=0;
+      this.velocity ??= new THREE.Vector2();
+      if(forward||right){
+        const intendedX=-Math.sin(this.azimuth)*forward+Math.cos(this.azimuth)*right;
+        const intendedZ=-Math.cos(this.azimuth)*forward-Math.sin(this.azimuth)*right;
+        const normalized=Math.max(1,Math.hypot(intendedX,intendedZ));
+        const speed=(this.keys.has("shift")||this.virtualRun?4.4:2.6);
+        this.velocity.lerp(
+          new THREE.Vector2(intendedX/normalized*speed,intendedZ/normalized*speed),
+          1-Math.exp(-dt*9)
+        );
+      } else {
+        this.velocity.multiplyScalar(Math.exp(-dt*16));
+        if(this.velocity.lengthSq()<.0025)this.velocity.set(0,0);
+      }
+      if(this.route.length){
+        const [x,z]=this.route[0],len=Math.hypot(x-p.x,z-p.z);
+        if(len<.16)this.route.shift();
         else {
-          const amount = Math.min(dt * 4.8, len);
-          dx = ((x - p.x) / len) * amount;
-          dz = ((z - p.z) / len) * amount;
+          const amount=Math.min(dt*4.4,len);
+          dx=(x-p.x)/len*amount;
+          dz=(z-p.z)/len*amount;
         }
+        this.velocity.set(0,0);
+      } else {
+        dx=this.velocity.x*dt;
+        dz=this.velocity.y*dt;
       }
       if (dx || dz) {
         if (this.canStep(p.x + dx, p.z + dz,p.x,p.z,p.y)) {
@@ -479,7 +501,10 @@ export class EmeraldEngine {
         } else if (this.canStep(p.x, p.z + dz,p.x,p.z,p.y)) {
           p.z += dz;
           moving = true;
-        } else this.route = [];
+        } else {
+          this.route=[];
+          this.velocity?.set(0,0);
+        }
         if (moving) {
           const angle = Math.atan2(dx, dz),
             delta = Math.atan2(

@@ -3,6 +3,7 @@ import {Sky} from "three/addons/objects/Sky.js";
 import {Water} from "three/addons/objects/Water.js";
 import {nodes,edges,places,heights,presets,platformRadius,groundHeight,PATH_WIDTH,isWalkable,type Quality} from "./topology";
 import {surface,waterNormal,labelTexture,random} from "./materials";
+import { dressZone, type ZoneKind } from "./zoneDressing";
 
 export interface Environment {
  root:THREE.Group;water:Water|THREE.Mesh;beacons:THREE.Group[];
@@ -156,7 +157,7 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
  }
  const core=mesh(new THREE.IcosahedronGeometry(.66,2),mint,hub,0,4.1,0);animated.push(core);
  // Open pavilion architecture. Every glazed wall has a true center cutout aligned with a path.
- function pavilion(node:number,width:number,depth:number,title:string,subtitle:string,kind:"build"|"automate"|"lead"|"recognition"|"origins"|"horizon"){
+ function pavilion(node:number,width:number,depth:number,title:string,subtitle:string,kind:ZoneKind){
   const [x,z]=nodes[node],h=heights[node],g=new THREE.Group();
   g.position.set(x,h+.1,z);
   const approach=kind==="build"?nodes[5]:kind==="automate"?nodes[18]:kind==="lead"?nodes[19]:kind==="recognition"?nodes[11]:kind==="origins"?nodes[3]:nodes[13];
@@ -173,6 +174,9 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
     box(g,timber,ix*2,.75,0,2.5,.17,1.5);
     box(g,frame,ix*2,.43,0,.16,.75,1.2);
    }
+  const dressed=dressZone(g,kind,width,depth,quality,{stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf});
+  playerColliders.push(...dressed.colliders);
+  animated.push(...dressed.animated);
    return;
   }
   if(kind==="origins"){
@@ -187,6 +191,9 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
     const plinth=cylinder(g,frame,xx,1.3,-2,.22,1.0,.22);
     plinth.castShadow=true;
    }
+  const dressed=dressZone(g,kind,width,depth,quality,{stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf});
+  playerColliders.push(...dressed.colliders);
+  animated.push(...dressed.animated);
    return;
   }
   const tall=kind==="lead"?7.5:6.1;
@@ -257,6 +264,10 @@ export function createEnvironment(scene:THREE.Scene,renderer:THREE.WebGLRenderer
    cylinder(g,stone,side*(w-1.1),.56,d-1,.52,1.05,.58,12);
    cylinder(g,grass,side*(w-1.1),1.23,d-1,.66,.65,.32,9);
   }
+  // Detailed storytelling elements remain subordinate to entrances and central navigation.
+  const dressed=dressZone(g,kind,width,depth,quality,{stone,frame,timber,glass,wall,dark,mint,skyGlow,gold,leaf});
+  playerColliders.push(...dressed.colliders);
+  animated.push(...dressed.animated);
   // Camera and locomotion collide against authored structural glass, never foliage.
  }
  pavilion(6,20,15,"BUILD STUDIO","ENGINEERING & PRODUCTS","build");
