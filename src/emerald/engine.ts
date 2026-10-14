@@ -449,7 +449,7 @@ export class EmeraldEngine {
       if (this.keys.has("s") || this.keys.has("arrowdown")) forward = -1;
       if (this.keys.has("d") || this.keys.has("arrowright")) right = 1;
       if (this.keys.has("a") || this.keys.has("arrowleft")) right = -1;
-      if (!forward && !right) { forward = this.joystick.y; right = this.joystick.x; }
+      if (!forward && !right) { forward = this.joystick?.y ?? 0; right = this.joystick?.x ?? 0; }
       let dx = 0,
         dz = 0;
       if (forward || right) {
